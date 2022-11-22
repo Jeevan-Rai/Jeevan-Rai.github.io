@@ -96,7 +96,7 @@ common
 /* ----- text defaults ----- */
 /* line 13, ../scss/_common.scss */
 body {
-  color: #8c8c8e;
+  color: #e5e5e5;
   font-size: 12px;
   font-family: "Poppins", sans-serif;
   font-weight: 300;
@@ -188,7 +188,7 @@ h6 {
 /* line 99, ../scss/_common.scss */
 a {
   text-decoration: none;
-  color: #8c8c8e; }
+  color: #e5e5e5; }
   /* line 103, ../scss/_common.scss */
   a:hover {
     text-decoration: none;
@@ -200,7 +200,7 @@ a {
 /* ----- table ----- */
 /* line 113, ../scss/_common.scss */
 .art-table {
-  color: #8c8c8e; }
+  color: #e5e5e5; }
   /* line 116, ../scss/_common.scss */
   .art-table ul {
     padding: 0;
@@ -298,7 +298,7 @@ link
   font-weight: 600;
   margin-right: 15px;
   margin-bottom: 10px;
-  color: #8c8c8e;
+  color: #e5e5e5;
   -webkit-transition: 0.4s ease-in-out;
   transition: 0.4s ease-in-out; }
   /* line 212, ../scss/_common.scss */
@@ -548,7 +548,7 @@ app marcup
         position: relative;
         font-size: 14px;
         font-weight: 400 !important;
-        color: #8c8c8e !important;
+        color: #e5e5e5 !important;
         height: 300px;
         line-height: 350px; }
 
@@ -1031,7 +1031,7 @@ info bar
             left: 28px;
             font-size: 10px;
             font-weight: 200;
-            color: #8c8c8e;
+            color: #e5e5e5;
             -webkit-box-shadow: 0 1px 4px 0 rgba(15, 15, 20, 0.1);
                     box-shadow: 0 1px 4px 0 rgba(15, 15, 20, 0.1);
             background: #191923;
@@ -1118,7 +1118,7 @@ info bar
         /* line 219, ../scss/_info-bar.scss */
         .art-info-bar .art-lang-skills .art-lang-skills-item .art-cirkle-progress .progressbar-text {
           font-size: 11px;
-          color: #8c8c8e !important;
+          color: #e5e5e5 !important;
           position: relative;
           left: 45% !important; }
           /* line 225, ../scss/_info-bar.scss */
@@ -1147,7 +1147,7 @@ info bar
         text-align: right;
         top: -6px !important;
         font-size: 11px;
-        color: #8c8c8e !important; }
+        color: #e5e5e5 !important; }
   /* line 259, ../scss/_info-bar.scss */
   .art-info-bar .art-knowledge-list {
     padding-left: 0; }
@@ -1155,7 +1155,7 @@ info bar
     .art-info-bar .art-knowledge-list li {
       list-style-type: none;
       margin-bottom: 5px;
-      color: #8c8c8e; }
+      color: #e5e5e5; }
       /* line 267, ../scss/_info-bar.scss */
       .art-info-bar .art-knowledge-list li:last-child {
         margin-bottom: 0; }
@@ -1203,7 +1203,7 @@ info bar
     z-index: 999; }
     /* line 303, ../scss/_info-bar.scss */
     .art-info-bar .art-ls-social a {
-      color: #8c8c8e;
+      color: #e5e5e5;
       -webkit-transition: 0.2s ease-in-out;
       transition: 0.2s ease-in-out; }
       /* line 307, ../scss/_info-bar.scss */
@@ -1310,7 +1310,7 @@ menu bar
           font-size: 11px;
           letter-spacing: 1px;
           font-weight: 500;
-          color: #8c8c8e;
+          color: #e5e5e5;
           -webkit-transition: 0.2s ease-in-out;
           transition: 0.2s ease-in-out; }
           /* line 78, ../scss/_menu-bar.scss */
@@ -1402,7 +1402,7 @@ menu bar
           text-shadow: 0 0 3px rgba(250, 250, 252, 0.4); }
         /* line 179, ../scss/_menu-bar.scss */
         .art-menu-bar nav .main-menu .menu-item.current-menu-item .sub-menu .menu-item a {
-          color: #8c8c8e;
+          color: #e5e5e5;
           text-shadow: none; }
           /* line 183, ../scss/_menu-bar.scss */
           .art-menu-bar nav .main-menu .menu-item.current-menu-item .sub-menu .menu-item a:hover {
@@ -1844,7 +1844,7 @@ content
   /* line 332, ../scss/_content.scss */
   .art-slider-navigation .swiper-pagination-bullet {
     margin-right: 10px;
-    background-color: #8c8c8e;
+    background-color: #e5e5e5;
     border-radius: 5px;
     opacity: 0.5;
     height: 4px;
@@ -2025,7 +2025,7 @@ content
 /* line 509, ../scss/_content.scss */
 .art-contact-form label {
   text-align: center;
-  color: #8c8c8e;
+  color: #e5e5e5;
   position: absolute;
   height: 50px;
   width: 50px;
@@ -2188,7 +2188,7 @@ footer {
   -webkit-box-shadow: 0 1px 4px 0 rgba(15, 15, 20, 0.1);
           box-shadow: 0 1px 4px 0 rgba(15, 15, 20, 0.1);
   font-size: 11px;
-  color: #8c8c8e;
+  color: #e5e5e5;
   -webkit-transition: 0.55s ease-in-out;
   transition: 0.55s ease-in-out;
   z-index: 9; }
@@ -2211,7 +2211,7 @@ portfolio
 /* ----- filter ----- */
 /* line 687, ../scss/_content.scss */
 .art-filter a {
-  color: #8c8c8e;
+  color: #e5e5e5;
   margin-bottom: 0; }
   /* line 691, ../scss/_content.scss */
   .art-filter a.art-current {
@@ -2424,7 +2424,7 @@ portfolio
   /* line 905, ../scss/_content.scss */
   .fancybox-toolbar .fancybox-button {
     background: transparent;
-    color: #8c8c8e; }
+    color: #e5e5e5; }
     /* line 909, ../scss/_content.scss */
     .fancybox-toolbar .fancybox-button:hover {
       color: #fafafc; }
@@ -2460,7 +2460,7 @@ portfolio
       -ms-flex-align: center;
           align-items: center;
   font-weight: 400;
-  color: #8c8c8e; }
+  color: #e5e5e5; }
 
 /* line 945, ../scss/_content.scss */
 .fancybox-progress {
@@ -2687,7 +2687,7 @@ burger button
     width: 15px;
     height: 3px;
     border-radius: 1px;
-    background: #8c8c8e;
+    background: #e5e5e5;
     -webkit-transition: 0.4s ease-in-out;
     transition: 0.4s ease-in-out;
     -webkit-backface-visibility: hidden;
