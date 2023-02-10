@@ -187,12 +187,13 @@ h6 {
 /* ----- link defaults ----- */
 /* line 99, ../scss/_common.scss */
 a {
-  text-decoration: none;
-  color: #e5e5e5; }
+  font-weight: bolder;
+  text-decoration:none;
+  color: #ffffff; }
   /* line 103, ../scss/_common.scss */
   a:hover {
     text-decoration: none;
-    color: #fafafc; }
+    color: #e6e6e6; }
   /* line 108, ../scss/_common.scss */
   a:focus {
     outline: inherit; }
