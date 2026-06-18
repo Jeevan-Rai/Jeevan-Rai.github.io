@@ -1,18 +1,1305 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>Jeevan P Rai - Redirecting...</title>
-  <script>
-    window.location.replace("https://portfolio.kronos-nexus.com");
-  </script>
-  <meta http-equiv="refresh" content="0; url=https://portfolio.kronos-nexus.com">
-  <link rel="canonical" href="https://portfolio.kronos-nexus.com">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeevan P Rai - Full Stack Developer & DevOps Engineer | Adroitx Limited UK | Software Development</title>
+    <meta name="description"
+        content="Jeevan P Rai (Jeevan Rai) - Full Stack Developer & DevOps Engineer at Adroitx Limited UK. Expert in Python, JavaScript, Kubernetes, Proxmox. Software development, infrastructure architecture, and homelab specialist from India.">
+    <meta name="keywords"
+        content="Jeevan P Rai, Jeevan Rai, Jeevan, Jeev, full stack developer, software development, DevOps engineer, Adroitx Limited, Python developer, JavaScript, Kubernetes, Proxmox, software engineer India, web development, mobile app development, infrastructure architecture, homelab, GitOps, Flutter developer">
+    <meta name="author" content="Jeevan P Rai">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Jeevan P Rai - Full Stack Developer & DevOps Engineer | Adroitx Limited">
+    <meta property="og:description"
+        content="Jeevan P Rai: Full Stack Developer & DevOps Engineer at Adroitx Limited UK. Expert in software development, infrastructure architecture, and enterprise homelab solutions.">
+    <meta property="og:url" content="https://portfolio.kronos-nexus.com">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://portfolio.kronos-nexus.com/assets/jeevan-p-rai-portfolio.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jeevan P Rai - Full Stack Developer & DevOps Engineer">
+    <meta name="twitter:description"
+        content="Full Stack Developer at Adroitx Limited UK specializing in Python, JavaScript, DevOps, and infrastructure architecture">
+    <link rel="canonical" href="https://portfolio.kronos-nexus.com">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --accent-primary: #00ff9f;
+            --accent-secondary: #00d4ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b8bcc8;
+            --text-muted: #6c7293;
+            --border-color: #2a2d3a;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 20px rgba(0, 255, 159, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            color: var(--accent-primary);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .terminal-demo {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background: #ff5f57;
+        }
+
+        .dot-yellow {
+            background: #ffbd2e;
+        }
+
+        .dot-green {
+            background: #28ca42;
+        }
+
+        .terminal-content {
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .terminal-prompt {
+            color: var(--accent-primary);
+        }
+
+        .terminal-command {
+            color: var(--accent-secondary);
+        }
+
+        .terminal-output {
+            color: var(--text-secondary);
+            margin-left: 2rem;
+        }
+
+        .typing-cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Status Cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            margin: 0 auto 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 159, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 255, 159, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 159, 0);
+            }
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            color: var(--accent-primary);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Experience Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent-primary);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 45%;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 0 4px var(--bg-primary);
+        }
+
+        .timeline-date {
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-company {
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .project-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glow);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--bg-tertiary);
+            color: var(--accent-secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: var(--accent-secondary);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .skill-category {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .skill-category h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .skill-name {
+            color: var(--text-secondary);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-marker {
+                left: 20px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <p>Redirecting to <a href="https://portfolio.kronos-nexus.com">portfolio.kronos-nexus.com</a></p>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <a href="#" class="logo mono">~/jeevan-rai</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-subtitle mono">$ whoami</div>
+            <h1 class="hero-title">Jeevan P Rai</h1>
+            <p class="hero-description">
+                Full-Stack Developer & DevOps Engineer at Adroitx Limited UK.
+                Leading technical innovation and architecting enterprise-grade homelab infrastructure
+                from India. Built scalable systems and deployed production-ready solutions.
+            </p>
+
+            <div class="terminal-demo mono">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="terminal-prompt">jeevan@kronos-nexus:~$</span> <span
+                            class="terminal-command">./status.sh</span></div>
+                    <div class="terminal-output">🟢 Gitea Server: Online</div>
+                    <div class="terminal-output">🟢 Proxmox Cluster: Ready</div>
+                    <div class="terminal-output">🟢 Mail Server: Active</div>
+                    <div class="terminal-output">🟢 Pi-hole DNS: Filtering</div>
+                    <div class="terminal-output">🟢 Kubernetes: 6 pods running</div>
+                    <div><span class="terminal-prompt">jeevan@kronos-nexus:~$</span> <span
+                            class="typing-cursor">_</span></div>
+                </div>
+            </div>
+
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-indicator"></div>
+                    <div>Infrastructure</div>
+                    <div style="color: var(--accent-primary); font-weight: 600;">Online</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-indicator"></div>
+                    <div>Available for</div>
+                    <div style="color: var(--accent-primary); font-weight: 600;">Collaboration</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-indicator"></div>
+                    <div>Current Role</div>
+                    <div style="color: var(--accent-primary); font-weight: 600;">Full-Stack Dev</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="section-subtitle mono">$ cat experience.log</div>
+        <h2 class="section-title">Professional Journey</h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">January 2025 - Present</div>
+                    <h3 class="timeline-title">Full-Stack Developer & DevOps Engineer</h3>
+                    <div class="timeline-company">Adroitx Limited UK (Remote from India)</div>
+                    <p class="timeline-description">
+                        Leading full-stack development and DevOps initiatives for a dynamic UK startup.
+                        Architected scalable systems, implemented CI/CD pipelines, and built production-ready
+                        applications. Managing cloud infrastructure and mentoring development practices.
+                    </p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">Previous Role</div>
+                    <h3 class="timeline-title">Software Engineer</h3>
+                    <div class="timeline-company">Tayana Mobility Technologies</div>
+                    <p class="timeline-description">
+                        Developed mobility technology solutions and built software that powered
+                        transportation innovation. Worked on robust, scalable applications
+                        for the mobility sector with focus on performance optimization.
+                    </p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2022 - 2023</div>
+                    <h3 class="timeline-title">Web/App Development Intern</h3>
+                    <div class="timeline-company">Anasoft Sullia, India</div>
+                    <p class="timeline-description">
+                        • Developed Android application for KVG AJPUC, Sullia (March 2023)<br>
+                        • Built web-based school/college automation system for KVG AJPUC and KVG IPS (Nov 2022)<br>
+                        • Contributed to blog website for KVG College of Engineering<br>
+                        • Developed website and E-commerce platform for Madhuri Honey<br>
+                        • Created website for Adeeshwaraswami Basadi with modern web standards
+                    </p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">April 2022 - June 2022</div>
+                    <h3 class="timeline-title">Key Achievement: Examination Portal</h3>
+                    <div class="timeline-company">KVG College of Engineering</div>
+                    <p class="timeline-description">
+                        Built examination portal for Dr. KVG scholarship with only 2 developers in limited timespan.
+                        Over 543 students registered and attended mock tests. Despite registration system challenges
+                        affecting 200 students, the project demonstrated significant technical achievement and learning.
+                    </p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="section-subtitle mono">$ ls -la ~/projects/</div>
+        <h2 class="section-title">Featured Projects</h2>
+
+        <div class="projects-grid">
+            <div class="project-card"
+                style="border-color: var(--accent-primary); box-shadow: 0 0 20px rgba(0, 255, 159, 0.15);">
+                <div class="project-header">
+                    <div class="project-icon" style="background: linear-gradient(135deg, #3B82F6, #6366F1);">
+                        <i class="fas fa-door-open" style="color: white;"></i>
+                    </div>
+                    <h3 class="project-title">PrimeX Pulse - Smart Gate Controller</h3>
+                </div>
+                <p class="project-description">
+                    IoT product turning any gate into a smart gate. ESP32-based hardware modules paired with
+                    an Android app for Bluetooth &amp; WiFi control, activity logging, secure access management,
+                    and progressive feature tiers from basic control to vehicle recognition.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">ESP32</span>
+                    <span class="tag">Android</span>
+                    <span class="tag">BLE</span>
+                    <span class="tag">WiFi</span>
+                    <span class="tag">IoT</span>
+                    <span class="tag">PlatformIO</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/Jeevan-Rai/primex-pulse-module" class="project-link">
+                        <i class="fab fa-github"></i> Source
+                    </a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fab fa-flutter"></i>
+                    </div>
+                    <h3 class="project-title">Fetch Pages Flutter Package</h3>
+                </div>
+                <p class="project-description">
+                    Published Flutter package on pub.dev for efficient page fetching and navigation management.
+                    Open-source contribution to the Flutter community with clean API design and comprehensive
+                    documentation.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Flutter</span>
+                    <span class="tag">Dart</span>
+                    <span class="tag">pub.dev</span>
+                    <span class="tag">Open Source</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://pub.dev/packages/fetch_pages" class="project-link">
+                        <i class="fas fa-cube"></i> pub.dev
+                    </a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="project-title">Kronos-Nexus HomeLab</h3>
+                </div>
+                <p class="project-description">
+                    Enterprise-grade self-hosted infrastructure featuring Proxmox virtualization,
+                    Gitea git server, self-hosted mail server, Pi-hole DNS filtering, and Kubernetes orchestration.
+                    Implemented complete network segmentation with VLANs and advanced security protocols.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Proxmox</span>
+                    <span class="tag">Kubernetes</span>
+                    <span class="tag">Gitea</span>
+                    <span class="tag">Mail Server</span>
+                    <span class="tag">Pi-hole</span>
+                    <span class="tag">OpenWRT</span>
+                    <span class="tag">Frigate</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="project-title">KVG Examination Portal</h3>
+                </div>
+                <p class="project-description">
+                    Built comprehensive examination system for KVG College of Engineering and Dr. KVG scholarship.
+                    Over 543 students registered and attended mock tests. Implemented secure test environments,
+                    automated grading systems, and detailed analytics. Built by only 2 developers in limited timespan.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/Jeevan-Rai/Exam-Website.git" class="project-link">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <h3 class="project-title">College Management System</h3>
+                </div>
+                <p class="project-description">
+                    Developed web-based school/college automation system for KVG AJPUC and KVG IPS, Sullia.
+                    Comprehensive student management, academic tracking, and administrative tools for educational
+                    institutions.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">PHP</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">Bootstrap</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+                    <h3 class="project-title">Dental Appointment System</h3>
+                </div>
+                <p class="project-description">
+                    Developed AI-powered dental appointment management system with machine learning models
+                    for treatment prediction and optimization. Built with Python Flask and
+                    integrated ML capabilities for smart scheduling.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">Machine Learning</span>
+                    <span class="tag">TensorFlow</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="project-title">KVG College Android App</h3>
+                </div>
+                <p class="project-description">
+                    Developed Android application for KVG AJPUC providing students and faculty with
+                    streamlined access to academic resources, schedules, and institutional
+                    communication. Implemented push notifications and offline capabilities.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Android</span>
+                    <span class="tag">Java</span>
+                    <span class="tag">Firebase</span>
+                    <span class="tag">Material Design</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3 class="project-title">E-Commerce Platform</h3>
+                </div>
+                <p class="project-description">
+                    Built E-commerce data management system demo where people can sell and buy products.
+                    Developed for Madhuri Honey with complete product catalog, shopping cart, and payment integration.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">Payment Gateway</span>
+                </div>
+                <div class="project-links">
+                    <a href="http://madhurihoney.com/" class="project-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i> Live Site
+                    </a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-place-of-worship"></i>
+                    </div>
+                    <h3 class="project-title">Adeeshwaraswami Basadi Website</h3>
+                </div>
+                <p class="project-description">
+                    Developed static website for Adeeshwaraswami Basadi using HTML, CSS, and JavaScript.
+                    Clean, responsive design showcasing cultural and religious information with modern web standards.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">HTML</span>
+                    <span class="tag">CSS</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">Responsive Design</span>
+                </div>
+                <div class="project-links">
+                    <a href="http://adeeshwaraswami.in/" class="project-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i> Live Site
+                    </a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">
+                        <i class="fas fa-blog"></i>
+                    </div>
+                    <h3 class="project-title">KVG Engineering Blog</h3>
+                </div>
+                <p class="project-description">
+                    Contributed to blog website development for KVG College of Engineering.
+                    Built content management system for publishing academic articles, news, and updates.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">WordPress</span>
+                    <span class="tag">PHP</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">CMS</span>
+                </div>
+                <div class="project-links">
+                    <a href="http://kvgengg.com/" class="project-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i> Visit Blog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="section-subtitle mono">$ cat /proc/skills</div>
+        <h2 class="section-title">Technical Expertise</h2>
+
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3><i class="fas fa-code"></i> Programming Languages</h3>
+                <div class="skill-item">
+                    <span class="skill-name">Python</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">JavaScript</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Java</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">C/C++</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">PHP</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">HTML/CSS</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3><i class="fas fa-cogs"></i> DevOps & Infrastructure</h3>
+                <div class="skill-item">
+                    <span class="skill-name">Kubernetes</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Proxmox</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Docker</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Gitea/GitOps</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Linux Administration</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3><i class="fas fa-database"></i> Frameworks & Tools</h3>
+                <div class="skill-item">
+                    <span class="skill-name">Flask/Django</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Spring Boot</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">MySQL/PostgreSQL</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">TensorFlow</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Bootstrap</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">WordPress</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3><i class="fas fa-network-wired"></i> Additional Technologies</h3>
+                <div class="skill-item">
+                    <span class="skill-name">Android Development</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Flutter/Dart</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Unreal Engine</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Arduino/IoT</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Nginx/Apache</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">AI & ML Models</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="contact">
+            <div class="section-subtitle mono">$ ./connect.sh</div>
+            <h2 class="section-title">Let's Connect</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Ready to discuss full-stack development, DevOps architecture, or homelab adventures?
+                Always happy to help fellow developers build awesome setups or just chat about tech! 🚀
+            </p>
+
+            <div class="contact-links">
+                <a href="mailto:jeevanraisonangeri@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </a>
+                <a href="https://linkedin.com/in/jeevanprai" class="contact-link" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fab fa-linkedin"></i>
+                    LinkedIn
+                </a>
+                <a href="https://github.com/Jeevan-Rai" class="contact-link" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fab fa-github"></i>
+                    GitHub
+                </a>
+                <a href="https://git.kronos-nexus.com" class="contact-link" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fas fa-code-branch"></i>
+                    Gitea
+                </a>
+            </div>
+
+            <div class="terminal-demo mono" style="margin-top: 2rem; max-width: 400px;">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="terminal-prompt">visitor@portfolio:~$</span> <span class="terminal-command">curl
+                            -X GET /contact</span></div>
+                    <div class="terminal-output">HTTP/1.1 200 OK</div>
+                    <div class="terminal-output">Content-Type: application/json</div>
+                    <div class="terminal-output"></div>
+                    <div class="terminal-output">{</div>
+                    <div class="terminal-output">&nbsp;&nbsp;"status": "available",</div>
+                    <div class="terminal-output">&nbsp;&nbsp;"response_time": "&lt; 24h",</div>
+                    <div class="terminal-output">&nbsp;&nbsp;"location": "India (Remote for UK)",</div>
+                    <div class="terminal-output">&nbsp;&nbsp;"interests": ["Full-Stack Dev", "DevOps", "Infrastructure"]
+                    </div>
+                    <div class="terminal-output">}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        style="background: var(--bg-secondary); padding: 2rem; text-align: center; border-top: 1px solid var(--border-color);">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                Built with passion for technology and infrastructure excellence
+            </p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                © 2025 Jeevan Rai. Powered by Kronos-Nexus Infrastructure.
+            </p>
+            <div style="margin-top: 1rem;">
+                <span style="color: var(--accent-primary); font-size: 0.8rem;">
+                    🟢 All systems operational | Last updated: <span id="last-updated"></span>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update last updated timestamp
+        document.getElementById('last-updated').textContent = new Date().toLocaleString();
+
+        // Smooth scrolling for in-page navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                // Ignore bare "#" placeholders — they are not valid selectors
+                if (!href || href === '#') {
+                    e.preventDefault();
+                    return;
+                }
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 10, 15, 0.98)';
+            } else {
+                header.style.background = 'rgba(10, 10, 15, 0.95)';
+            }
+        });
+
+        // Typing animation for terminal
+        const commands = [
+            './status.sh',
+            './projects.sh',
+            './skills.sh',
+            './contact.sh'
+        ];
+
+        let commandIndex = 0;
+        const typingElement = document.querySelector('.typing-cursor');
+
+        if (typingElement) {
+            setInterval(() => {
+                const command = commands[commandIndex % commands.length];
+                typingElement.textContent = command;
+                commandIndex++;
+            }, 3000);
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Mobile menu toggle
+        const createMobileMenu = () => {
+            const nav = document.querySelector('.nav');
+            const navLinks = document.querySelector('.nav-links');
+            let menuButton = nav.querySelector('.menu-toggle');
+
+            if (window.innerWidth <= 768) {
+                if (!menuButton) {
+                    menuButton = document.createElement('button');
+                    menuButton.className = 'menu-toggle';
+                    menuButton.setAttribute('aria-label', 'Toggle navigation menu');
+                    menuButton.innerHTML = '<i class="fas fa-bars"></i>';
+                    menuButton.style.cssText = `
+                        background: none;
+                        border: none;
+                        color: var(--text-primary);
+                        font-size: 1.2rem;
+                        cursor: pointer;
+                        display: block;
+                    `;
+
+                    menuButton.addEventListener('click', () => {
+                        const isOpen = navLinks.style.display === 'flex';
+                        navLinks.style.display = isOpen ? 'none' : 'flex';
+                        navLinks.style.flexDirection = 'column';
+                        navLinks.style.position = 'absolute';
+                        navLinks.style.top = '100%';
+                        navLinks.style.left = '0';
+                        navLinks.style.right = '0';
+                        navLinks.style.background = 'var(--bg-secondary)';
+                        navLinks.style.padding = '1rem';
+                        navLinks.style.borderTop = '1px solid var(--border-color)';
+                    });
+
+                    nav.appendChild(menuButton);
+                }
+            } else if (menuButton) {
+                // Returning to desktop: remove the toggle and reset inline styles
+                menuButton.remove();
+                navLinks.removeAttribute('style');
+            }
+        };
+
+        createMobileMenu();
+        window.addEventListener('resize', createMobileMenu);
+
+        // Add some dynamic status indicators
+        const updateStatus = () => {
+            const indicators = document.querySelectorAll('.status-indicator');
+            indicators.forEach((indicator, index) => {
+                setTimeout(() => {
+                    indicator.style.background = `hsl(${120 + index * 60}, 70%, 50%)`;
+                }, index * 200);
+            });
+        };
+
+        updateStatus();
+        setInterval(updateStatus, 5000);
+
+        // Terminal command simulation
+        const simulateTerminalActivity = () => {
+            const terminalOutputs = document.querySelectorAll('.terminal-output');
+            terminalOutputs.forEach((output, index) => {
+                setTimeout(() => {
+                    output.style.opacity = '0.7';
+                    setTimeout(() => {
+                        output.style.opacity = '1';
+                    }, 100);
+                }, index * 300);
+            });
+        };
+
+        setInterval(simulateTerminalActivity, 8000);
+    </script>
+
+    <!-- Schema Markup for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jeevan P Rai",
+        "alternateName": ["Jeevan Rai", "Jeevan", "Jeev"],
+        "jobTitle": "Full Stack Developer & DevOps Engineer",
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Adroitx Limited UK"
+        },
+        "url": "https://portfolio.kronos-nexus.com",
+        "sameAs": [
+            "https://linkedin.com/in/jeevanprai",
+            "https://github.com/Jeevan-Rai",
+            "https://git.kronos-nexus.com",
+            "https://pub.dev/publishers/jeevanrai/packages"
+        ],
+        "knowsAbout": [
+            "Full Stack Development",
+            "Software Development",
+            "DevOps Engineering",
+            "Infrastructure Architecture",
+            "Python Programming",
+            "JavaScript Development",
+            "Kubernetes",
+            "Proxmox Virtualization",
+            "Flutter Development",
+            "Mobile App Development",
+            "Web Development",
+            "GitOps",
+            "Linux Administration",
+            "Database Management",
+            "Cloud Computing"
+        ],
+        "hasCredential": [
+            "Full Stack Developer at Adroitx Limited UK",
+            "Published Flutter Package Developer",
+            "Infrastructure Architecture Specialist"
+        ],
+        "description": "Jeevan P Rai is a Full Stack Developer and DevOps Engineer at Adroitx Limited UK, specializing in software development, infrastructure architecture, and enterprise homelab solutions."
+    }
+    </script>
 </body>
 
 </html>
