@@ -642,6 +642,36 @@
             margin-top: 14px;
         }
 
+        /* System breakdown inside a feature card */
+        .sysgrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 22px;
+            margin: 18px 0 4px;
+        }
+
+        .sysgrid .item {
+            border-left: 2px solid var(--line-strong);
+            padding-left: 13px;
+        }
+
+        .sysgrid .item .k {
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            color: var(--accent-2);
+            margin-bottom: 3px;
+        }
+
+        .sysgrid .item .v {
+            font-size: 0.83rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 640px) {
+            .sysgrid { grid-template-columns: 1fr; }
+        }
+
         /* ---------- Infrastructure topology ---------- */
         .lab-wrap {
             display: grid;
@@ -1096,8 +1126,37 @@ Type <span class="ac">help</span> to explore.</div>
                 </div>
 
                 <div class="proj-grid reveal">
-                    <!-- fetch_pages : fully real -->
+                    <!-- Vastavik : flagship -->
                     <article class="card feature">
+                        <div class="card-top">
+                            <div>
+                                <h3>Vastavik</h3>
+                                <div class="sub">Media provenance &amp; deepfake-detection platform</div>
+                            </div>
+                            <span class="badge dev"><b></b>Active dev</span>
+                        </div>
+                        <p class="desc">An end-to-end media authenticity system: a 6-layer, fail-closed detection pipeline
+                            — provenance → forensics → detector farm → commercial ensemble → fusion → policy — across image,
+                            video and audio, paired with on-chain ownership, native mobile + web clients, and a separate
+                            business (KYB) verification track. I architected the ML, backend, computer-vision and blockchain
+                            layers.</p>
+                        <div class="sysgrid">
+                            <div class="item"><div class="k">ML / SLM engine</div><div class="v">Vastavik-DF distilled detectors (EfficientNetV2 · ViT · VideoMAE · wav2vec2) + Vastavik-Judge SLM. Knowledge distillation, LoRA continual-learning with replay, champion/challenger shadow-promotion.</div></div>
+                            <div class="item"><div class="k">Backend · Node/TS</div><div class="v">124 files. Capture-source classifier (EXIF/XMP/QuickTime), C2PA Content Credentials verification, pluggable deepfake providers + ensemble, BullMQ workers, S3, Stripe, RBAC.</div></div>
+                            <div class="item"><div class="k">CV matcher · FastAPI</div><div class="v">Raw-vs-edit forensics — SIFT+RANSAC geometry, residual/blob diff, video pHash keyframe alignment, audio onset+MFCC, evidence heatmaps.</div></div>
+                            <div class="item"><div class="k">Blockchain · Go</div><div class="v">Hyperledger Fabric chaincode: register / verify / transfer media ownership on-chain.</div></div>
+                            <div class="item"><div class="k">Clients</div><div class="v">SwiftUI iOS (81 files) + Java Android (95 files): upload, verify-with-original, presigned S3, review flows.</div></div>
+                            <div class="item"><div class="k">Web · React/TS</div><div class="v">Admin panel, creator portal, marketing + verified sites — 4 front-ends over a Node BFF.</div></div>
+                            <div class="item"><div class="k">KYB track · NestJS</div><div class="v">Business/website verification: DUNS/Tax/VAT/registry, DNS/WHOIS/SSL/reputation, Playwright, badge/QR embed, per-site Stripe, continuous re-verification.</div></div>
+                            <div class="item"><div class="k">Docs</div><div class="v">9 architecture docs, OpenAPI spec, ER + Mermaid diagrams, security audit &amp; remediation plan.</div></div>
+                        </div>
+                        <div class="tags">
+                            <span class="tag">Deepfake detection</span><span class="tag">Applied ML / SLM</span><span class="tag">Distillation</span><span class="tag">CV forensics</span><span class="tag">C2PA</span><span class="tag">Hyperledger Fabric</span><span class="tag">Node / TS</span><span class="tag">FastAPI</span><span class="tag">SwiftUI</span><span class="tag">Android</span><span class="tag">React</span><span class="tag">NestJS</span><span class="tag">AWS · S3</span><span class="tag">Stripe</span>
+                        </div>
+                    </article>
+
+                    <!-- fetch_pages : fully real -->
+                    <article class="card">
                         <div class="card-top">
                             <div>
                                 <h3>fetch_pages</h3>
@@ -1123,20 +1182,6 @@ Type <span class="ac">help</span> to explore.</div>
                         </div>
                     </article>
 
-                    <!-- Vastavik : brief-provided only -->
-                    <article class="card">
-                        <div class="card-top">
-                            <div>
-                                <h3>Vastavik</h3>
-                                <div class="sub">Authenticity validation &amp; verification platform</div>
-                            </div>
-                            <span class="badge dev"><b></b>Active dev</span>
-                        </div>
-                        <p class="desc">A platform focused on validating and verifying authenticity. In active
-                            development — architecture and public write-up to follow.</p>
-                        <p class="note">Details pending — no fabricated features listed.</p>
-                    </article>
-
                     <!-- YouID : live product -->
                     <article class="card">
                         <div class="card-top">
@@ -1151,22 +1196,16 @@ Type <span class="ac">help</span> to explore.</div>
                         <p class="note">Public case study in progress.</p>
                     </article>
 
-                    <!-- VerifyCall : public repo -->
+                    <!-- VerifyCall : private -->
                     <article class="card">
                         <div class="card-top">
                             <div>
                                 <h3>VerifyCall</h3>
-                                <div class="sub">Web front-end · public repository</div>
+                                <div class="sub">Call verification — web product</div>
                             </div>
-                            <span class="badge"><b></b>Repo</span>
+                            <span class="badge dev"><b></b>Active dev</span>
                         </div>
-                        <p class="desc">Web front-end for VerifyCall. Source is public on GitHub.</p>
-                        <div class="card-links">
-                            <a href="https://github.com/Jeevan-Rai/VerifyCallWeb" target="_blank" rel="noopener noreferrer">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 8.8 21.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
-                                Source
-                            </a>
-                        </div>
+                        <p class="desc">A call-verification web product. Private codebase; public case study to follow.</p>
                     </article>
 
                     <!-- Yantra -->
