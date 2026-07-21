@@ -275,15 +275,69 @@
             font-size: 1.02rem;
         }
 
+        /* Apple-style entrance: soft rise + scale + blur, springy easing */
         .reveal {
             opacity: 0;
-            transform: translateY(22px);
-            transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+            transform: translateY(26px) scale(0.985);
+            filter: blur(6px);
+            transition: opacity 0.8s var(--ease), transform 0.9s var(--ease), filter 0.8s var(--ease);
+            will-change: opacity, transform, filter;
         }
 
         .reveal.in {
             opacity: 1;
             transform: none;
+            filter: none;
+        }
+
+        /* Staggered cascade: children of a .stagger container reveal in sequence */
+        .stagger > * {
+            opacity: 0;
+            transform: translateY(22px) scale(0.99);
+            filter: blur(5px);
+            transition: opacity 0.7s var(--ease), transform 0.8s var(--ease), filter 0.7s var(--ease);
+            will-change: opacity, transform, filter;
+        }
+
+        .stagger.in > * {
+            opacity: 1;
+            transform: none;
+            filter: none;
+        }
+
+        .stagger.in > *:nth-child(1) { transition-delay: 0.05s; }
+        .stagger.in > *:nth-child(2) { transition-delay: 0.12s; }
+        .stagger.in > *:nth-child(3) { transition-delay: 0.19s; }
+        .stagger.in > *:nth-child(4) { transition-delay: 0.26s; }
+        .stagger.in > *:nth-child(5) { transition-delay: 0.33s; }
+        .stagger.in > *:nth-child(6) { transition-delay: 0.40s; }
+        .stagger.in > *:nth-child(7) { transition-delay: 0.47s; }
+        .stagger.in > *:nth-child(8) { transition-delay: 0.54s; }
+
+        /* Hero load choreography */
+        @keyframes heroRise {
+            from { opacity: 0; transform: translateY(26px); filter: blur(9px); }
+            to { opacity: 1; transform: none; filter: none; }
+        }
+
+        .hero-anim {
+            opacity: 0;
+            animation: heroRise 1s var(--ease) both;
+            animation-delay: var(--hd, 0s);
+        }
+
+        /* Scroll progress bar */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            transform: scaleX(0);
+            transform-origin: 0 50%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            z-index: 1200;
+            pointer-events: none;
         }
 
         /* ---------- Hero ---------- */
@@ -999,6 +1053,61 @@
         .cmdk-item .ci-hint { margin-left: auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted-2); }
         .cmdk-empty { padding: 22px; text-align: center; color: var(--muted-2); font-size: 0.9rem; }
 
+        /* ---------- Ambient "live" motion ---------- */
+        /* Data pulses travel along topology links (dots injected via JS) */
+        .flow-dot { fill: var(--accent-2); }
+
+        /* Links gently breathe */
+        #topo-lines line { animation: linePulse 3.2s ease-in-out infinite; }
+        @keyframes linePulse {
+            0%, 100% { stroke-opacity: 0.18; }
+            50% { stroke-opacity: 0.5; }
+        }
+
+        /* Node status dots breathe, staggered so it feels alive not synced */
+        .topo .node .s { animation: dotBreathe 2.8s ease-in-out infinite; }
+        .topo .node:nth-child(2) .s { animation-delay: 0.2s; }
+        .topo .node:nth-child(3) .s { animation-delay: 0.5s; }
+        .topo .node:nth-child(4) .s { animation-delay: 0.9s; }
+        .topo .node:nth-child(5) .s { animation-delay: 0.3s; }
+        .topo .node:nth-child(6) .s { animation-delay: 1.2s; }
+        .topo .node:nth-child(7) .s { animation-delay: 0.7s; }
+        .topo .node:nth-child(8) .s { animation-delay: 1.4s; }
+        .topo .node:nth-child(9) .s { animation-delay: 1.0s; }
+        @keyframes dotBreathe {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.5); }
+            50% { box-shadow: 0 0 0 5px rgba(63, 185, 80, 0); }
+        }
+
+        /* Service status dots breathe too */
+        .svc .s { animation: dotBreathe 3s ease-in-out infinite; }
+
+        /* Hero ambient gradient drifts slowly for a subtle sense of life */
+        @keyframes gradientDrift {
+            0% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(-2.5%, 1.5%, 0); }
+            100% { transform: translate3d(0, 0, 0); }
+        }
+        body::before { animation: gradientDrift 18s ease-in-out infinite; }
+
+        /* Primary button sheen sweep on hover */
+        .btn.primary { position: relative; overflow: hidden; }
+        .btn.primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transform: skewX(-18deg);
+            transition: left 0.7s var(--ease);
+        }
+        .btn.primary:hover::after { left: 130%; }
+
+        /* Cards lift a touch more fluidly */
+        .card { will-change: transform; }
+
         /* ---------- Responsive ---------- */
         @media (max-width: 900px) {
             .hero-grid { grid-template-columns: 1fr; gap: 34px; }
@@ -1021,13 +1130,18 @@
 
         @media (prefers-reduced-motion: reduce) {
             * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-            .reveal { opacity: 1; transform: none; }
+            .reveal { opacity: 1; transform: none; filter: none; }
+            .stagger > * { opacity: 1; transform: none; filter: none; }
+            .hero-anim { opacity: 1; animation: none; }
+            .progress { display: none; }
+            .flow-dot { display: none; }
         }
     </style>
 </head>
 
 <body>
     <a href="#projects" class="skip">Skip to content</a>
+    <div class="progress" id="progress" aria-hidden="true"></div>
 
     <!-- Header -->
     <header id="site-header">
@@ -1054,15 +1168,15 @@
             <div class="wrap">
                 <div class="hero-grid">
                     <div>
-                        <div class="hero-status"><span class="dot"></span> Available for platform &amp; DevOps work</div>
-                        <h1 class="hero-name">Jeevan&nbsp;P&nbsp;Rai</h1>
-                        <div class="hero-roles">
+                        <div class="hero-status hero-anim" style="--hd:0.05s"><span class="dot"></span> Available for platform &amp; DevOps work</div>
+                        <h1 class="hero-name hero-anim" style="--hd:0.15s">Jeevan&nbsp;P&nbsp;Rai</h1>
+                        <div class="hero-roles hero-anim" style="--hd:0.28s">
                             <span>Systems Engineer</span><span>Platform Builder</span><span>DevOps</span><span>AI</span>
                         </div>
-                        <p class="hero-headline">Building <em style="font-style:normal;color:var(--accent-2)">reliable
+                        <p class="hero-headline hero-anim" style="--hd:0.4s">Building <em style="font-style:normal;color:var(--accent-2)">reliable
                                 systems</em> before beautiful interfaces. <span class="thin">Infrastructure that stays up,
                                 platforms teams can trust, products that ship.</span></p>
-                        <div class="cta-row">
+                        <div class="cta-row hero-anim" style="--hd:0.52s">
                             <a href="#projects" class="btn primary">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
                                 Projects
@@ -1074,7 +1188,7 @@
                     </div>
 
                     <!-- Terminal widget -->
-                    <div class="terminal" aria-hidden="false">
+                    <div class="terminal hero-anim" style="--hd:0.62s" aria-hidden="false">
                         <div class="term-bar">
                             <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
                             <span class="label">jeevan@kronos-nexus — zsh</span>
@@ -1094,8 +1208,8 @@ Type <span class="ac">help</span> to explore.</div>
                     </div>
                 </div>
 
-                <div class="stat-strip">
-                    <div class="stat"><div class="n">5</div><div class="l">Isolated VLANs</div></div>
+                <div class="stat-strip hero-anim" style="--hd:0.74s">
+                    <div class="stat"><div class="n" data-count="5">0</div><div class="l">Isolated VLANs</div></div>
                     <div class="stat"><div class="n">Proxmox</div><div class="l">Virtualization host</div></div>
                     <div class="stat"><div class="n">pub.dev</div><div class="l">Published package</div></div>
                     <div class="stat"><div class="n">Self-host</div><div class="l">DNS · Proxy · VPN · Files</div></div>
@@ -1125,7 +1239,7 @@ Type <span class="ac">help</span> to explore.</div>
                         are being written for each.</p>
                 </div>
 
-                <div class="proj-grid reveal">
+                <div class="proj-grid stagger">
                     <!-- Vastavik : flagship -->
                     <article class="card feature">
                         <div class="card-top">
@@ -1332,7 +1446,7 @@ Type <span class="ac">help</span> to explore.</div>
                 <div class="eyebrow">Production systems</div>
                 <h2 class="title" id="svc-t">Services I run in the open.</h2>
                 <p class="lede">Public-facing endpoints served from the platform, behind the TLS proxy.</p>
-                <div class="svc-grid">
+                <div class="svc-grid stagger">
                     <a class="svc" href="https://youid.kronos-nexus.com" target="_blank" rel="noopener noreferrer">
                         <span class="left"><span class="s"></span>youid.kronos-nexus.com</span><span class="status">Product</span></a>
                     <a class="svc" href="https://portfolio.kronos-nexus.com" target="_blank" rel="noopener noreferrer">
@@ -1351,7 +1465,7 @@ Type <span class="ac">help</span> to explore.</div>
             <div class="wrap reveal">
                 <div class="eyebrow">Engineering timeline</div>
                 <h2 class="title" id="tl-t">The path so far.</h2>
-                <div class="tl">
+                <div class="tl stagger">
                     <div class="tl-item">
                         <div class="tl-date">Jan 2025 — Present</div>
                         <div class="tl-role">Full-Stack Developer &amp; DevOps Engineer</div>
@@ -1389,7 +1503,7 @@ Type <span class="ac">help</span> to explore.</div>
             <div class="wrap reveal">
                 <div class="eyebrow">Toolbox</div>
                 <h2 class="title" id="sk-t">What I work with.</h2>
-                <div class="skill-cols">
+                <div class="skill-cols stagger">
                     <div class="skill-group">
                         <h4>Platform &amp; DevOps</h4>
                         <ul>
@@ -1488,21 +1602,53 @@ Type <span class="ac">help</span> to explore.</div>
             'use strict';
             document.getElementById('yr').textContent = new Date().getFullYear();
 
-            // Header shadow on scroll
-            var header = document.getElementById('site-header');
-            var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 12); };
-            window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
-
-            // Reveal on scroll
             var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Header shadow + scroll progress + subtle hero parallax (one rAF-batched handler)
+            var header = document.getElementById('site-header');
+            var progress = document.getElementById('progress');
+            var heroInner = document.querySelector('.hero .hero-grid');
+            var ticking = false;
+            function frame() {
+                ticking = false;
+                var y = window.scrollY || window.pageYOffset;
+                header.classList.toggle('scrolled', y > 12);
+                if (progress) {
+                    var h = document.documentElement.scrollHeight - window.innerHeight;
+                    progress.style.transform = 'scaleX(' + (h > 0 ? Math.min(y / h, 1) : 0) + ')';
+                }
+                // Hero drifts up and softens slightly as you scroll past it
+                if (heroInner && !reduce && y < window.innerHeight) {
+                    heroInner.style.transform = 'translateY(' + (y * 0.12) + 'px)';
+                    heroInner.style.opacity = String(Math.max(1 - y / (window.innerHeight * 0.85), 0));
+                }
+            }
+            function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+            window.addEventListener('scroll', onScroll, { passive: true }); frame();
+
+            // Reveal + staggered cascade on scroll
             if (!reduce && 'IntersectionObserver' in window) {
                 var io = new IntersectionObserver(function (entries) {
                     entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
                 }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-                document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+                document.querySelectorAll('.reveal, .stagger').forEach(function (el) { io.observe(el); });
             } else {
-                document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+                document.querySelectorAll('.reveal, .stagger').forEach(function (el) { el.classList.add('in'); });
             }
+
+            // Count-up for numeric stats when the hero settles
+            document.querySelectorAll('[data-count]').forEach(function (el) {
+                var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+                if (reduce) { el.textContent = String(target); return; }
+                var start = null, dur = 900;
+                function step(ts) {
+                    if (!start) start = ts;
+                    var p = Math.min((ts - start) / dur, 1);
+                    el.textContent = String(Math.round((1 - Math.pow(1 - p, 3)) * target));
+                    if (p < 1) requestAnimationFrame(step);
+                }
+                setTimeout(function () { requestAnimationFrame(step); }, 850);
+            });
 
             // Smooth anchor scroll (guard bare '#')
             document.querySelectorAll('a[href^="#"]').forEach(function (a) {
@@ -1527,10 +1673,21 @@ Type <span class="ac">help</span> to explore.</div>
             if (svg) {
                 svg.setAttribute('viewBox', '0 0 100 100');
                 var frag = '';
-                lines.forEach(function (l) {
+                lines.forEach(function (l, idx) {
                     var a = pos[l[0]], b = pos[l[1]];
                     frag += '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] +
                         '" stroke="rgba(124,138,255,0.28)" stroke-width="0.25" vector-effect="non-scaling-stroke"/>';
+                    // Traveling data pulse along each link (SMIL), staggered so it feels alive
+                    if (!reduce) {
+                        var dur = (2.6 + (idx % 4) * 0.45).toFixed(2);
+                        var begin = (idx * 0.4).toFixed(2);
+                        frag += '<circle class="flow-dot" r="0.7">' +
+                            '<animateMotion dur="' + dur + 's" begin="' + begin + 's" repeatCount="indefinite" ' +
+                            'path="M ' + a[0] + ' ' + a[1] + ' L ' + b[0] + ' ' + b[1] + '"/>' +
+                            '<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" ' +
+                            'dur="' + dur + 's" begin="' + begin + 's" repeatCount="indefinite"/>' +
+                            '</circle>';
+                    }
                 });
                 svg.innerHTML = frag;
             }
