@@ -1068,7 +1068,7 @@ Type <span class="ac">help</span> to explore.</div>
                     <div class="stat"><div class="n">5</div><div class="l">Isolated VLANs</div></div>
                     <div class="stat"><div class="n">Proxmox</div><div class="l">Virtualization host</div></div>
                     <div class="stat"><div class="n">pub.dev</div><div class="l">Published package</div></div>
-                    <div class="stat"><div class="n">Self-host</div><div class="l">Git · DNS · Proxy · VPN</div></div>
+                    <div class="stat"><div class="n">Self-host</div><div class="l">DNS · Proxy · VPN · Files</div></div>
                 </div>
             </div>
         </section>
@@ -1247,8 +1247,8 @@ Type <span class="ac">help</span> to explore.</div>
                             <span class="tip">TLS reverse proxy (Let's Encrypt) terminating all public subdomains.</span>
                         </div>
                         <div class="node" style="left:40%; top:82%" data-node="git">
-                            <span class="s"></span>Gitea
-                            <span class="tip">Self-hosted Git for private repositories and CI.</span>
+                            <span class="s"></span>Nextcloud
+                            <span class="tip">Self-hosted file storage and sync.</span>
                         </div>
                         <div class="node" style="left:63%; top:82%" data-node="k8s">
                             <span class="s"></span>Kubernetes
@@ -1268,9 +1268,9 @@ Type <span class="ac">help</span> to explore.</div>
                                 <li>Kubernetes</li><li>Docker</li>
                                 <li>WireGuard</li><li>Nginx</li>
                                 <li>Pi-hole</li><li>Unbound</li>
-                                <li>Gitea</li><li>Nextcloud</li>
-                                <li>Prometheus</li><li>Grafana</li>
-                                <li>Cloudflare</li><li>Let's Encrypt</li>
+                                <li>Nextcloud</li><li>Prometheus</li>
+                                <li>Grafana</li><li>Cloudflare</li>
+                                <li>Let's Encrypt</li>
                             </ul>
                         </div>
                         <div class="lab-legend">
@@ -1294,16 +1294,14 @@ Type <span class="ac">help</span> to explore.</div>
                 <h2 class="title" id="svc-t">Services I run in the open.</h2>
                 <p class="lede">Public-facing endpoints served from the platform, behind the TLS proxy.</p>
                 <div class="svc-grid">
-                    <a class="svc" href="https://git.kronos-nexus.com" target="_blank" rel="noopener noreferrer">
-                        <span class="left"><span class="s"></span>git.kronos-nexus.com</span><span class="status">Gitea</span></a>
                     <a class="svc" href="https://youid.kronos-nexus.com" target="_blank" rel="noopener noreferrer">
                         <span class="left"><span class="s"></span>youid.kronos-nexus.com</span><span class="status">Product</span></a>
                     <a class="svc" href="https://portfolio.kronos-nexus.com" target="_blank" rel="noopener noreferrer">
                         <span class="left"><span class="s"></span>portfolio.kronos-nexus.com</span><span class="status">Site</span></a>
                     <a class="svc" href="https://files.kronos-nexus.com" target="_blank" rel="noopener noreferrer">
                         <span class="left"><span class="s"></span>files.kronos-nexus.com</span><span class="status">Storage</span></a>
-                    <a class="svc" href="https://kas.juvyron.com" target="_blank" rel="noopener noreferrer">
-                        <span class="left"><span class="s"></span>kas.juvyron.com</span><span class="status">App</span></a>
+                    <span class="svc"><span class="left"><span class="s"></span>DNS · Pi-hole + Unbound</span><span class="status">Filtering</span></span>
+                    <span class="svc"><span class="left"><span class="s"></span>WireGuard VPN</span><span class="status">Remote</span></span>
                     <span class="svc"><span class="left"><span class="s"></span>Reverse proxy</span><span class="status">Nginx · TLS</span></span>
                 </div>
             </div>
@@ -1358,7 +1356,7 @@ Type <span class="ac">help</span> to explore.</div>
                         <ul>
                             <li>Proxmox</li><li>Kubernetes &amp; Docker</li><li>OpenWRT / networking</li>
                             <li>Nginx · reverse proxy · TLS</li><li>WireGuard</li><li>Prometheus &amp; Grafana</li>
-                            <li>Gitea / GitOps · CI/CD</li><li>Linux administration</li>
+                            <li>GitOps · CI/CD</li><li>Linux administration</li>
                         </ul>
                     </div>
                     <div class="skill-group">
@@ -1394,7 +1392,7 @@ Type <span class="ac">help</span> to explore.</div>
                         </a>
                         <a class="btn" href="https://github.com/Jeevan-Rai" target="_blank" rel="noopener noreferrer">GitHub</a>
                         <a class="btn" href="https://linkedin.com/in/jeevanprai" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                        <a class="btn" href="https://git.kronos-nexus.com" target="_blank" rel="noopener noreferrer">Gitea</a>
+                        <a class="btn" href="https://pub.dev/packages/fetch_pages" target="_blank" rel="noopener noreferrer">pub.dev</a>
                     </div>
                 </div>
             </div>
@@ -1429,8 +1427,7 @@ Type <span class="ac">help</span> to explore.</div>
       "sameAs": [
         "https://github.com/Jeevan-Rai",
         "https://linkedin.com/in/jeevanprai",
-        "https://pub.dev/packages/fetch_pages",
-        "https://git.kronos-nexus.com"
+        "https://pub.dev/packages/fetch_pages"
       ],
       "knowsAbout": ["Platform Engineering","DevOps","Proxmox","Kubernetes","Networking","Self-hosting","Full Stack Development","Flutter","Python"]
     }
@@ -1506,8 +1503,8 @@ Type <span class="ac">help</span> to explore.</div>
                 help: 'commands: whoami · projects · lab · status · clear',
                 whoami: 'Jeevan P Rai — systems & platform engineer. DevOps @ Adroitx (UK).',
                 projects: 'fetch_pages (pub.dev) · Vastavik · YouID · VerifyCall · Yantra · KVG Exam Portal',
-                lab: 'Proxmox · OpenWRT/RPi4 · 5 VLANs · WireGuard · Pi-hole+Unbound · Gitea · Nginx · K8s',
-                status: 'proxy: ok · git: ok · dns: ok · vpn: ok · monitoring: ok'
+                lab: 'Proxmox · OpenWRT/RPi4 · 5 VLANs · WireGuard · Pi-hole+Unbound · Nginx · K8s',
+                status: 'proxy: ok · dns: ok · vpn: ok · monitoring: ok · storage: ok'
             };
             function termPrint(cmd, out, isOk) {
                 var line = document.createElement('div');
@@ -1551,7 +1548,6 @@ Type <span class="ac">help</span> to explore.</div>
                 { t: 'GitHub', h: 'external', a: function () { open('https://github.com/Jeevan-Rai'); }, k: 'code repos' },
                 { t: 'LinkedIn', h: 'external', a: function () { open('https://linkedin.com/in/jeevanprai'); }, k: 'profile' },
                 { t: 'pub.dev — fetch_pages', h: 'external', a: function () { open('https://pub.dev/packages/fetch_pages'); }, k: 'flutter package' },
-                { t: 'Gitea', h: 'external', a: function () { open('https://git.kronos-nexus.com'); }, k: 'git self-hosted' },
                 { t: 'Copy email address', h: 'action', a: function () { navigator.clipboard && navigator.clipboard.writeText('jeevanraisonangeri@gmail.com'); }, k: 'email copy' }
             ];
             var active = 0, filtered = items.slice();
