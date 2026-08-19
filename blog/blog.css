@@ -247,7 +247,65 @@ a:hover { color: var(--accent); }
     text-align: center;
 }
 
+/* ---- Post extras: callouts, script/vocab cards, references ---- */
+.callout {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1.15rem 1.4rem;
+    color: var(--muted);
+    font-size: 0.96rem;
+}
+.callout strong { color: var(--text); }
+
+.script-card {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.3rem 1.5rem;
+}
+.script-card .cap {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+    margin-bottom: 1rem;
+}
+.script-row { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.15rem 1.1rem; align-items: baseline; }
+.script-row + .script-row { margin-top: 0.75rem; border-top: 1px solid var(--line); padding-top: 0.75rem; }
+.glyph {
+    font-size: 1.65rem;
+    color: var(--accent-2);
+    font-family: 'Noto Sans Kannada', 'Noto Sans Tulu Tigalari', var(--font-body);
+    line-height: 1.25;
+}
+.script-row .en { align-self: center; }
+.translit { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+.gloss { color: #d7dade; }
+
+.refs { list-style: none; padding: 0; counter-reset: ref; margin-top: 1.5rem; }
+.refs li {
+    counter-increment: ref;
+    padding-left: 2.4rem;
+    position: relative;
+    margin-top: 0.85rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+.refs li::before {
+    content: counter(ref);
+    position: absolute; left: 0; top: 0.05rem;
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent);
+    background: var(--accent-soft); border: 1px solid var(--line); border-radius: 6px;
+    width: 1.7rem; height: 1.7rem;
+    display: flex; align-items: center; justify-content: center;
+}
+
 @media (max-width: 640px) {
     .blog-hero { padding: 3rem 0 2rem; }
     .post-card { padding: 1.3rem 1.35rem; }
+    .script-row { grid-template-columns: 1fr; gap: 0.1rem; }
 }
