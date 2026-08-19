@@ -109,6 +109,54 @@ a:hover { color: var(--accent); }
 }
 .blog-hero p { color: var(--muted); max-width: 52ch; font-size: 1.05rem; }
 
+/* ---- Author card + framed avatar ---- */
+.author {
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    margin-top: 2.2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+}
+.avatar-ring {
+    flex-shrink: 0;
+    padding: 3px;
+    border-radius: 50%;
+    background: conic-gradient(from 210deg, var(--accent), var(--accent-2), var(--ok), var(--accent));
+    box-shadow: 0 6px 22px rgba(124, 138, 255, 0.22);
+    line-height: 0;
+}
+.avatar-ring img {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 16%;
+    display: block;
+    border: 3px solid var(--ink);
+    background: var(--panel);
+}
+.author-meta .name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+}
+.author-meta .bio { color: var(--muted); font-size: 0.92rem; margin-top: 0.15rem; }
+.author-meta .links { margin-top: 0.5rem; display: flex; gap: 1rem; }
+.author-meta .links a { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+.author-meta .links a:hover { color: var(--accent-2); }
+
+/* small byline avatar on posts */
+.byline-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    object-fit: cover; object-position: 50% 16%;
+    border: 1px solid var(--line-strong);
+    vertical-align: middle;
+    margin-right: 0.1rem;
+}
+
 /* ---- Post list ---- */
 .post-list { padding: 1rem 0 5rem; display: grid; gap: 1rem; }
 .post-card {
