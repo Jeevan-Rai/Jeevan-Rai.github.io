@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My House Was Whispering to Strangers — Taking Back My DNS with Pi-hole &amp; unbound | Jeevan P Rai</title>
+    <meta name="description"
+        content="A story about the quietest layer of the internet — DNS — and the evening I realised every device in my home was handing its questions to strangers. On Pi-hole, unbound, recursive resolution, and what 'being in control' of your own network actually costs.">
+    <meta name="keywords"
+        content="Pi-hole, unbound, recursive DNS, DNSSEC, self-hosted DNS, DNS privacy, homelab, ad blocking, DNS over HTTPS, DoH, DoT, network control, self-hosting">
+    <meta name="author" content="Jeevan P Rai">
+    <link rel="canonical"
+        href="https://portfolio.kronos-nexus.com/blog/posts/my-house-was-whispering-to-strangers.html">
+    <meta property="og:title" content="My House Was Whispering to Strangers — Taking Back My DNS">
+    <meta property="og:description"
+        content="A story about DNS, control, and the evening I realised my ad-blocker had been a scarecrow all along.">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2026-08-20">
+    <meta property="article:section" content="Technology">
+    <meta property="og:url"
+        content="https://portfolio.kronos-nexus.com/blog/posts/my-house-was-whispering-to-strangers.html">
+    <meta name="robots" content="index, follow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="nav">
+            <a href="/#top" class="brand"><span class="dot"></span>jeevan-rai<span class="sub">.systems</span></a>
+            <a href="/blog/" class="nav-back">← all writing</a>
+        </div>
+    </header>
+
+    <main>
+        <article class="wrap article">
+            <header class="article-header">
+                <div class="post-meta">
+                    <span>Aug 20, 2026</span>
+                    <span>· 9 min read</span>
+                    <span>· technology</span>
+                </div>
+                <h1>My House Was Whispering to Strangers</h1>
+                <p class="article-lede">Every device you own asks the internet thousands of quiet questions a day.
+                    This is the story of the evening I found out who had been answering mine — and what it took to
+                    change that.</p>
+            </header>
+
+            <div class="prose">
+                <p>Here is something we don't think about. Before your phone loads a page, streams a song, or
+                    silently phones home in your pocket at 3 a.m., it asks a question first: <em>"where is
+                        this?"</em> It takes a name a human can read and asks for the number a machine can reach.
+                    That's DNS — the Domain Name System — and it happens thousands of times a day, per device, in a
+                    home full of devices. It is the most-used system almost no one ever sees.</p>
+
+                <p>I like to think of DNS less as the internet's phone book and more as its <strong>diary</strong>.
+                    A phone book is neutral. But a running list of every name your home looks up — every app the
+                    moment it wakes, every site before you've finished typing, every smart bulb and TV and watch
+                    reporting in — that isn't a phone book. That's a record of intent. It's what you're <em>about</em>
+                    to do, written down a half-second before you do it. And whoever answers those questions gets to
+                    read the diary.</p>
+
+                <p>For years I told myself I'd taken care of this. I had the popular ad-blocker running on a little
+                    always-on box in the corner. A tidy dashboard. Graphs. I felt like a responsible adult who had
+                    Handled It.</p>
+
+                <h2>The scarecrow</h2>
+                <p>One slow evening I actually looked — not at the dashboard, but at where the questions were really
+                    going. And the number that should have been near the top was near zero.</p>
+
+                <p>Almost nothing in my house was going through my blocker. The router — the thing every device
+                    trusts by default — had quietly been doing what routers do out of the box: taking every
+                    question and forwarding it, unblinking, straight to a pair of enormous public resolvers run by
+                    exactly the kind of companies I'd set the blocker up to keep at arm's length. My careful little
+                    box in the corner was a <strong>scarecrow</strong>. It stood there looking authoritative while
+                    the whole field walked around it.</p>
+
+                <blockquote>Setting something up is not the same as being in control of it. I knew that as an
+                    engineer. It's humbling to learn it again as a resident of your own house.</blockquote>
+
+                <p>That's the part I want this to be about, because it's the part the tutorials skip. This isn't a
+                    story about installing software. It's about the difference between the <em>appearance</em> of
+                    control and the real thing — and how much quiet work lives in that gap.</p>
+
+                <h2>Two jobs, and the one everybody skips</h2>
+                <p>When people talk about this setup, they usually mean two pieces of software. It took me a while
+                    to understand they do genuinely different jobs, and that the famous one is not the important
+                    one.</p>
+
+                <p>The famous one is the <strong>bouncer</strong>. It holds a very long list of names known to
+                    belong to ads and trackers, and when a device asks for one, it simply says <em>"that address
+                        doesn't exist"</em> and the ad never loads. Satisfying. Visible. It's the reason most people
+                    show up.</p>
+
+                <p>The one people skip is the <strong>resolver</strong> — and it's the whole point. Blocking a bad
+                    name is good. But every <em>good</em> name still had to be looked up somewhere, and by default
+                    "somewhere" means asking a stranger's server to go find the answer for you. You've cleaned up
+                    <em>which</em> questions get asked, and left <em>who answers them</em> exactly as it was.</p>
+
+                <p>The fix is a small, unglamorous program that does the looking-up itself. Instead of handing your
+                    question to Google or Cloudflare and trusting whatever comes back, it starts at the top — the
+                    internet's root servers — and walks the chain down, hop by hop, asking the authoritative source
+                    for each name directly, and remembering the answer.<sup><a href="#n1">[1]</a></sup> It is called
+                    a <em>recursive resolver</em>, and running your own changes the shape of the whole thing:</p>
+
+                <pre><code>Before:  every device  →  my router  →  a stranger's resolver  →  the internet
+                        (they see every question)
+
+After:   every device  →  my router  →  my blocker  →  my own resolver  →  the roots, directly
+                        (no stranger in the middle)</code></pre>
+
+                <p>There's a second gift hidden in there, called <strong>DNSSEC</strong>. It lets a resolver check
+                    that an answer really came from who it claims to, unaltered in flight — cryptographic proof
+                    against someone quietly slipping you the wrong address.<sup><a href="#n2">[2]</a></sup> When my
+                    resolver returns an answer it has verified this way, it stamps it as <em>authenticated</em>. The
+                    first time I watched that little stamp appear on a lookup my own machine had reasoned out from
+                    the root, I felt something I can only describe as <em>tenancy</em> — like I'd stopped renting
+                    this part of my life and started owning it.</p>
+
+                <h2>Control is a fence, not a switch</h2>
+                <p>I thought that was the finish line. It was the start.</p>
+
+                <p>Because here's the thing nobody warns you about: <strong>your own devices cheat.</strong> Not out
+                    of malice — out of design. A surprising number of gadgets don't ask politely and accept your
+                    house's answer. Some have a public DNS address hard-coded into their firmware and try to reach
+                    it directly, ignoring your setup entirely — a TV, a phone OS, a random smart plug, all quietly
+                    routing around you. Others have moved to <em>encrypted</em> DNS, wrapping their questions inside
+                    ordinary-looking web traffic specifically so networks like yours can't see or redirect
+                    them.</p>
+
+                <p>So "being in control" turned out not to be a setting I could switch on. It was a <strong>fence I
+                        had to keep mending.</strong> Catch the devices dialling out to hard-coded strangers and
+                    gently insist their questions come home instead. Close the encrypted side-doors that exist for
+                    the express purpose of escaping. Notice the next gap and close that too. It is quietly
+                    adversarial, in your own home, against things you paid for. There's a strange intimacy to it —
+                    learning the little dishonesties of every object you own.</p>
+
+                <blockquote>I grew up around the idea that the things you depend on should be things you actually
+                    keep — mended, tended, yours. This is just that idea, in packets.</blockquote>
+
+                <h2>The humility clause</h2>
+                <p>And then the last lesson, which is the most important and the least glamorous.</p>
+
+                <p>Once every question in the house flowed through my one little box, that box became the single
+                    thread the whole home hung from. A power cut, a failed update, a kernel deciding to sulk — and
+                    suddenly <em>nobody</em> can reach anything, because nobody can look up a name. Total control
+                    has a failure mode, and its name is <em>total.</em></p>
+
+                <p>So I did something that felt, at first, like a betrayal of the whole project: I built in a
+                    fallback to a big public resolver — the exact strangers I'd worked to cut out. But I made it
+                    <strong>strict</strong>: my own resolver first, always, for everything; the stranger only ever
+                    reached for when my box is genuinely unreachable, and dropped the instant it comes back. Filtered
+                    and private when I'm up; merely <em>working</em> when I'm down. The ads slip back in for those
+                    few minutes, and I decided I can live with that far more easily than a house that goes dark
+                    because I insisted on doing everything myself.</p>
+
+                <p>That felt like the real graduation. Not the recursion, not the crypto stamp — the moment I chose,
+                    deliberately, <em>when to loosen my own grip.</em> Control that can't bend just breaks. The
+                    maturity is in knowing exactly where you'll compromise, on purpose, before reality forces the
+                    question.</p>
+
+                <h2>What actually changed</h2>
+                <p>The ads went away, sure. That's the part you can screenshot. But that was never really it.</p>
+
+                <p>What changed is quieter and harder to point at. Now, when my home turns to the internet and asks
+                    where something is — thousands of times a day, in the background, while I'm asleep or cooking or
+                    not thinking about it at all — the question <em>stays home first.</em> My own machine reasons it
+                    out, from the root, and keeps the diary. No stranger in the middle, most of the time, by my
+                    choice, on terms I set and mend and occasionally, knowingly, relax.</p>
+
+                <p>The best infrastructure is invisible. You forget it's there. The only difference now is that when
+                    I do remember — some slow evening, looking not at the dashboard but at where the questions
+                    really go — the answer is <em>me.</em> That turns out to be worth an evening's work, and then a
+                    lifetime of small mending. Most things worth keeping are.</p>
+
+                <p>I left the coast to build systems out of software. This is a small one. But it's mine, end to
+                    end, root to leaf — and I understand every hop. That's the whole reason I do any of this.</p>
+
+                <hr>
+
+                <h2 id="notes">Notes &amp; further reading</h2>
+                <p style="color:var(--muted-2);font-size:0.9rem;">I've deliberately kept my own network out of this
+                    — no addresses, no map, no config. If you want to build your own version, start here, from the
+                    people who actually make these tools:</p>
+                <ol class="refs">
+                    <li id="n1">Pi-hole's official guide to pairing it with a recursive resolver — <a
+                            href="https://docs.pi-hole.net/guides/dns/unbound/" target="_blank" rel="noopener">"Pi-hole
+                            as All-Around DNS Solution" (docs.pi-hole.net)</a>. And the resolver itself, unbound,
+                        from its makers at NLnet Labs — <a href="https://nlnetlabs.nl/projects/unbound/about/"
+                            target="_blank" rel="noopener">nlnetlabs.nl</a>.</li>
+                    <li id="n2">What DNSSEC is and why the "authenticated" stamp matters — ICANN's explainer, <a
+                            href="https://www.icann.org/resources/pages/dnssec-what-is-it-why-important-2019-03-05-en"
+                            target="_blank" rel="noopener">"DNSSEC – What Is It and Why Is It Important?"</a></li>
+                    <li>The blocker, if you're new to it — <a href="https://pi-hole.net/" target="_blank"
+                            rel="noopener">Pi-hole</a>. Everything above is possible with entirely free, open-source
+                        software and a very modest always-on machine.</li>
+                </ol>
+            </div>
+
+            <footer class="article-footer">
+                <span><img class="byline-avatar" src="../img/jeevan.jpg" width="34" height="34"
+                        alt="Jeevan P Rai"> Jeevan P Rai</span>
+                <a href="/blog/" class="nav-back">← all writing</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        © 2026 Jeevan P Rai · Powered by Kronos-Nexus Infrastructure
+    </footer>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "My House Was Whispering to Strangers — Taking Back My DNS with Pi-hole & unbound",
+        "description": "A story about DNS, control, and the evening I realised every device in my home was handing its questions to strangers — and what it took to change that with Pi-hole and unbound.",
+        "datePublished": "2026-08-20",
+        "author": {
+            "@type": "Person",
+            "name": "Jeevan P Rai",
+            "url": "https://portfolio.kronos-nexus.com"
+        },
+        "keywords": "Pi-hole, unbound, recursive DNS, DNSSEC, self-hosted DNS, DNS privacy, homelab, ad blocking, DNS over HTTPS",
+        "articleSection": "Technology",
+        "mainEntityOfPage": "https://portfolio.kronos-nexus.com/blog/posts/my-house-was-whispering-to-strangers.html"
+    }
+    </script>
+</body>
+
+</html>
