@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ancestors' Alphabet Just Became Code — How Tulu's Tigalari Script Got Into Unicode | Jeevan P Rai</title>
+    <meta name="description"
+        content="For an engineer, every letter is a number. In 2024, about 80 numbers were quietly assigned to the letters my ancestors wrote and the world nearly forgot. The story of how the endangered Tulu-Tigalari script got into Unicode — and why encoding a dead alphabet is a rescue, not a footnote.">
+    <meta name="keywords"
+        content="Tigalari script, Tulu script, Tulu-Tigalari, Unicode, Unicode 16, endangered script, Tulu language, palm-leaf manuscripts, Vaishnavi Murthy, Grantha script, code points, digital preservation, Dakshina Kannada">
+    <meta name="author" content="Jeevan P Rai">
+    <link rel="canonical" href="https://portfolio.kronos-nexus.com/blog/posts/my-ancestors-alphabet-became-code.html">
+    <meta property="og:title" content="My Ancestors' Alphabet Just Became Code — Tulu's Tigalari Script in Unicode">
+    <meta property="og:description"
+        content="How the endangered Tulu-Tigalari script got into Unicode — and why encoding a nearly-dead alphabet is a rescue, told by an engineer who comes from it.">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2026-08-20">
+    <meta property="article:section" content="Culture &amp; Technology">
+    <meta property="og:url" content="https://portfolio.kronos-nexus.com/blog/posts/my-ancestors-alphabet-became-code.html">
+    <meta name="robots" content="index, follow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="nav">
+            <a href="/#top" class="brand"><span class="dot"></span>jeevan-rai<span class="sub">.systems</span></a>
+            <a href="/blog/" class="nav-back">← all writing</a>
+        </div>
+    </header>
+
+    <main>
+        <article class="wrap article">
+            <header class="article-header">
+                <div class="post-meta">
+                    <span>Aug 20, 2026</span>
+                    <span>· 9 min read</span>
+                    <span>· culture &amp; technology</span>
+                </div>
+                <h1>My Ancestors' Alphabet Just Became Code</h1>
+                <p class="article-lede">Every letter you're reading is secretly a number. In 2024, about eighty
+                    numbers were quietly handed to a set of letters my ancestors wrote and the world had very nearly
+                    forgotten. This is where my two worlds meet.</p>
+            </header>
+
+            <div class="prose">
+                <p>Here's a thing engineers know and everyone else is happily spared: the letters on this screen
+                    aren't letters. They're numbers. Behind every character is a code point — <code>A</code> is
+                    <code>U+0041</code>, and so on — entries in a giant shared table called <strong>Unicode</strong>
+                    that lets every device on earth agree on what a given number should draw. It is one of the
+                    quietly great achievements of computing: a single map of nearly every symbol humans write.</p>
+
+                <p>And here is the brutal corollary, the one I feel in my chest as someone from Tulu Nadu:
+                    <strong>if your script isn't in that table, it does not digitally exist.</strong> You can't type
+                    it. You can't search it. You can't put it in a filename, a message, a database, a webpage. In
+                    the twenty-first century, a script that hasn't been encoded isn't merely old-fashioned — it's
+                    invisible, and invisibility is how writing systems quietly die.</p>
+
+                <p>For most of my life, that was the exact status of my own ancestral script.</p>
+
+                <h2>A script that died the first time</h2>
+                <p>Tulu — my mother tongue's cousin, the language of my coast — was not always written in the
+                    Kannada letters it uses today. Its own traditional script is <strong>Tigalari</strong>: a
+                    Southern Brahmic script descended from Grantha, in use from around the 8th–9th century, once
+                    used to write Sanskrit, Kannada and Tulu alike, preserved for centuries on palm-leaf
+                    manuscripts.<sup><a href="#r1">[1]</a></sup> I wrote about it in the broader <a
+                        href="tulunad-heritage-land-of-daivas.html">Tulunad Heritage</a> piece; here I want to tell
+                    the part that undoes me a little.</p>
+
+                <p>Tigalari died once already. When printing arrived, it never made the leap to type; presses and
+                    missionaries set Tulu in the Kannada script instead, and the old letters slid out of use — not
+                    with a decree, just with disuse, surviving as bundles of palm leaves in old houses that fewer
+                    and fewer people could read.<sup><a href="#r1">[1]</a></sup> A whole way of writing became a
+                    thing your grandfather owned and you couldn't.</p>
+
+                <blockquote>An unread manuscript is a hard drive with no reader left. The data survives; the ability
+                    to open it does not. My heritage had a storage-format problem centuries before I'd have the
+                    words for it.</blockquote>
+
+                <h2>The unglamorous heroism of a code point</h2>
+                <p>So how does an almost-dead alphabet get a second life? Not with a viral moment. With
+                    <em>paperwork</em> — years of it — which is the part I find genuinely moving.</p>
+
+                <p>The long campaign to bring Tulu-Tigalari into Unicode was led in large part by a typeface
+                    designer, Vaishnavi Murthy, across the better part of two decades — an effort she began as a
+                    graphic-design student.<sup><a href="#r2">[2]</a></sup> She grew up visiting her grandfather's
+                    500-year-old home in Mangaluru, its shelves lined with palm-leaf manuscripts in the very script
+                    she'd spend eighteen years fighting to save.<sup><a href="#r2">[2]</a></sup> A first
+                    preliminary proposal went to Unicode in 2011; it wasn't comprehensive enough. What followed was
+                    the slow, exacting work standards actually require — linguists and script experts (Vinodh Rajan
+                    among them) reconciling archaic letterforms across Tulu, Kannada and Sanskrit manuscripts,
+                    revised proposals in 2021 and 2022, even a debate over what to <em>call</em> it.<sup><a
+                            href="#r3">[3]</a><a href="#r4">[4]</a></sup></p>
+
+                <p>I have spent my career around exactly this kind of work — specs, proposals, committees, the
+                    endless patient argument to get a standard <em>right</em> so that everyone downstream can just
+                    use it and never think about it. It is the least celebrated work in technology. And here it was,
+                    aimed not at a payment protocol or a file format, but at rescuing letters. Someone did the
+                    boring, heroic thing for an alphabet.</p>
+
+                <p class="callout"><strong>The milestone:</strong> in 2024, the <strong>Tulu-Tigalari</strong>
+                    script was formally added to <strong>Unicode 16.0</strong>, assigned the code-point block
+                    <code>U+11380–U+113FF</code>.<sup><a href="#r1">[1]</a></sup> After that, my ancestors' letters
+                    are no longer just marks on palm leaf. They are a permanent, standardised part of the alphabet
+                    of every computer on the planet.</p>
+
+                <h2>The strangest resurrection</h2>
+                <p>There's a detail here that reads like poetry to me. Tigalari originally wrote Sanskrit and
+                    Kannada more than it wrote Tulu. It fell almost entirely out of use. And now it is being brought
+                    back specifically to <em>revive a different language</em> — Tulu — to the point that it's
+                    increasingly just called <strong>Tulu Lipi</strong>, "the Tulu script."<sup><a
+                            href="#r3">[3]</a></sup> A dead alphabet, re-pointed at a living language it barely used
+                    to serve. Scripts, it turns out, can be refactored.</p>
+
+                <h2>The honest part: encoded is not alive</h2>
+                <p>I'd be breaking my own rule if I ended on triumph, because being in Unicode is necessary, not
+                    sufficient. A code point is an address, not a life. For most people the letters still won't
+                    render — the fonts are rare, keyboards rarer, and the number of people who can actually
+                    <em>read</em> Tigalari is smaller than the number who now technically <em>could</em> type it. In
+                    software terms: we got the protocol standardised, and the implementation is barely started.</p>
+
+                <p>That's why the encoding matters and also why it isn't the finish line. Unicode makes the revival
+                    <em>possible</em> — fonts, input methods, digitised manuscripts, the script being taught again
+                    in schools across the coast can now all point at the same shared standard.<sup><a
+                            href="#r1">[1]</a></sup> But possible is not done. The letters still need people willing
+                    to learn them. Standards give you the road; someone still has to walk it.</p>
+
+                <h2>Why this one got to me</h2>
+                <p>I write software for a living. I deal in encodings and code points and standards on ordinary
+                    Tuesdays, and they almost never move me. This one did.</p>
+
+                <p>Because for once the thing being encoded was <em>mine</em> — the marks on my grandparents'
+                    generation's palm leaves, the script behind the language of my home, handed a permanent seat at
+                    the table where the world keeps its writing. The most affecting piece of engineering I
+                    encountered this year wasn't a framework or a model. It was roughly eighty numbers, argued into
+                    existence over eighteen years, that let a nearly-dead alphabet be typed again.</p>
+
+                <blockquote>We usually think digitising something drains the life from it. Once in a while, it's the
+                    opposite — the only thing that lets it live at all.</blockquote>
+
+                <p>This is the exact seam where my two worlds meet: the coast I come from and the systems I build. I
+                    left one to work in the other. It's a quiet joy to find that, just occasionally, the second can
+                    reach back and save something in the first.</p>
+
+                <hr>
+
+                <h2 id="references">Sources &amp; references</h2>
+                <ol class="refs">
+                    <li id="r1">Wikipedia — <a href="https://en.wikipedia.org/wiki/Tigalari_script" target="_blank"
+                            rel="noopener">"Tigalari script"</a> and <a
+                            href="https://en.wikipedia.org/wiki/Tulu-Tigalari_(Unicode_block)" target="_blank"
+                            rel="noopener">"Tulu-Tigalari (Unicode block)."</a> (Brahmic origin; decline under
+                        printing; Unicode 16.0, block U+11380–U+113FF; school revival)</li>
+                    <li id="r2">Rest of World — <a href="https://restofworld.org/2021/tulu-unicode-script/"
+                            target="_blank" rel="noopener">"Forget emoji, the real Unicode drama is over an
+                            endangered Indian script."</a> (Vaishnavi Murthy's ~18-year campaign; her grandfather's
+                        palm-leaf manuscripts)</li>
+                    <li id="r3">Nishant Ratnakar / Solmelu — <a
+                            href="https://solmelu.medium.com/tulu-language-tulu-script-and-its-unicode-1a59ca03749b"
+                            target="_blank" rel="noopener">"Tulu language, Tulu Script, and its Unicode"</a>; and the
+                        Atlas of Endangered Alphabets — <a
+                            href="https://www.endangeredalphabets.net/alphabets/tigalari-tulu/" target="_blank"
+                            rel="noopener">"Tigalari-Tulu."</a> (the script reviving a different language; "Tulu
+                        Lipi")</li>
+                    <li id="r4">Unicode Consortium — <a href="https://www.unicode.org/L2/L2021/21210-tulu-tigalari.pdf"
+                            target="_blank" rel="noopener">"Updated proposal to encode Tulu-Tigalari script in
+                            Unicode" (L2/21-210)</a>. (the technical proposal itself; contributors and letterform
+                        unification)</li>
+                </ol>
+            </div>
+
+            <footer class="article-footer">
+                <span><img class="byline-avatar" src="../img/jeevan.jpg" width="34" height="34"
+                        alt="Jeevan P Rai"> Jeevan P Rai</span>
+                <a href="/blog/" class="nav-back">← all writing</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        © 2026 Jeevan P Rai · Powered by Kronos-Nexus Infrastructure
+    </footer>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "My Ancestors' Alphabet Just Became Code — How Tulu's Tigalari Script Got Into Unicode",
+        "description": "The story of how the endangered Tulu-Tigalari script was encoded into Unicode 16.0 — and why encoding a nearly-dead alphabet is a rescue, told by an engineer who comes from Tulu Nadu.",
+        "datePublished": "2026-08-20",
+        "author": {
+            "@type": "Person",
+            "name": "Jeevan P Rai",
+            "url": "https://portfolio.kronos-nexus.com"
+        },
+        "keywords": "Tigalari script, Tulu script, Tulu-Tigalari, Unicode, Unicode 16, endangered script, Tulu language, palm-leaf manuscripts, digital preservation",
+        "articleSection": "Culture & Technology",
+        "mainEntityOfPage": "https://portfolio.kronos-nexus.com/blog/posts/my-ancestors-alphabet-became-code.html"
+    }
+    </script>
+</body>
+
+</html>
