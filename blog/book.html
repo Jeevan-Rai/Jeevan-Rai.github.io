@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Book — Writing by Jeevan P Rai</title>
+    <meta name="description" content="Read Jeevan P Rai's writing as a book — a field notebook of Tulu Nadu heritage, systems, and ideas.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://portfolio.kronos-nexus.com/blog/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0a0b0d;
+            --ink-2: #0d0f12;
+            --panel: #131519;
+            --line: rgba(255, 255, 255, 0.09);
+            --text: #edeef1;
+            --muted: #9096a1;
+            --accent: #7c8aff;
+            --accent-2: #a7b0ff;
+            --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+            --serif: 'Lora', Georgia, serif;
+            /* paper */
+            --paper: #f2ebdc;
+            --paper-2: #ece3d0;
+            --paper-edge: #d8ceb6;
+            --paper-ink: #2b2721;
+            --paper-muted: #6f6656;
+            --paper-accent: #6b4f9e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        body {
+            font-family: var(--font-display);
+            background:
+                radial-gradient(70rem 50rem at 50% -10%, rgba(124, 138, 255, 0.10), transparent 60%),
+                radial-gradient(60rem 50rem at 50% 120%, rgba(124, 138, 255, 0.06), transparent 60%),
+                var(--ink);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* top bar — the back path */
+        .topbar {
+            position: relative;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(10, 11, 13, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .brand {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .brand .dot { width: 7px; height: 7px; border-radius: 50%; background: #3fb950; box-shadow: 0 0 0 3px rgba(63, 185, 80, 0.16); }
+        .back {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-decoration: none;
+            border: 1px solid var(--line);
+            padding: 7px 12px;
+            border-radius: 9px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .back:hover { color: var(--accent-2); border-color: rgba(255,255,255,0.18); }
+
+        /* stage */
+        .stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 2600px;
+            padding: 24px 16px 30px;
+            min-height: 0;
+        }
+
+        /* book sizing: page aspect ~ 1:1.4; scales to fit */
+        .book {
+            position: relative;
+            width: min(94vw, 900px);
+            height: min(74vh, 640px);
+            transform-style: preserve-3d;
+            transition: transform 0.9s var(--ease);
+        }
+        /* when closed, only the cover (right half) shows — recenter it */
+        .book.closed { transform: translateX(-25%); }
+
+        .page, .cover, .leaf {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            border-radius: 4px 10px 10px 4px;
+            overflow: hidden;
+        }
+        .page-left { left: 0; border-radius: 10px 4px 4px 10px; }
+        .page-right { left: 50%; }
+
+        /* paper look */
+        .paper {
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, var(--paper-2), var(--paper) 12%);
+            color: var(--paper-ink);
+            box-shadow: inset 0 0 60px rgba(120, 100, 60, 0.12);
+            padding: clamp(20px, 3.4vw, 42px);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .page-left .paper { background: linear-gradient(270deg, var(--paper-2), var(--paper) 12%); }
+        /* gutter shadow near the spine */
+        .page-right .paper::before,
+        .leaf-face.front .paper::before {
+            content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 34px;
+            background: linear-gradient(90deg, rgba(90,70,40,0.18), transparent);
+            pointer-events: none;
+        }
+        .page-left .paper::before,
+        .leaf-face.back .paper::before {
+            content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 34px;
+            background: linear-gradient(270deg, rgba(90,70,40,0.18), transparent);
+            pointer-events: none;
+        }
+
+        .pg-num { position: absolute; bottom: 16px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--paper-muted); }
+        .page-right .pg-num, .leaf-face.front .pg-num { right: 22px; }
+        .page-left .pg-num, .leaf-face.back .pg-num { left: 22px; }
+
+        /* page content types */
+        .eyebrow { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-accent); margin-bottom: 14px; }
+        .title-page { justify-content: center; text-align: center; }
+        .title-page h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 4.4vw, 2.5rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 14px; }
+        .title-page .by { font-family: var(--serif); font-style: italic; color: var(--paper-muted); font-size: 1rem; }
+        .title-page .rule { width: 46px; height: 2px; background: var(--paper-accent); margin: 18px auto; opacity: 0.6; }
+
+        .toc h2, .chap h2 { font-family: var(--font-display); }
+        .toc h2 { font-size: 1.3rem; margin-bottom: 4px; }
+        .toc .lead { font-family: var(--serif); font-size: 0.92rem; color: var(--paper-muted); margin-bottom: 16px; }
+        .toc ol { list-style: none; counter-reset: c; }
+        .toc li { counter-increment: c; display: flex; gap: 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px dotted rgba(90,70,40,0.25); font-family: var(--serif); font-size: 0.95rem; }
+        .toc li::before { content: counter(c, upper-roman); font-family: var(--font-mono); font-size: 0.7rem; color: var(--paper-accent); min-width: 30px; }
+        .toc a { color: var(--paper-ink); text-decoration: none; }
+        .toc a:hover { color: var(--paper-accent); }
+
+        .chap { justify-content: flex-start; }
+        .chap .num { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-accent); margin-bottom: 18px; }
+        .chap h2 { font-size: clamp(1.3rem, 3vw, 1.75rem); line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 10px; }
+        .chap .meta { font-family: var(--font-mono); font-size: 0.7rem; color: var(--paper-muted); margin-bottom: 18px; }
+        .chap .excerpt { font-family: var(--serif); font-size: 1rem; line-height: 1.55; color: #4a4436; flex: 1; }
+        .chap .read {
+            align-self: flex-start; margin-top: 18px;
+            font-family: var(--font-mono); font-size: 0.76rem; text-decoration: none;
+            color: #fff; background: var(--paper-accent);
+            padding: 9px 15px; border-radius: 8px;
+            transition: transform 0.15s var(--ease), opacity 0.2s;
+        }
+        .chap .read:hover { opacity: 0.9; transform: translateY(-1px); }
+        .colophon { justify-content: center; text-align: center; }
+        .colophon .fin { font-family: var(--serif); font-style: italic; color: var(--paper-muted); font-size: 1.1rem; margin-bottom: 12px; }
+        .colophon a { color: var(--paper-accent); text-decoration: none; font-family: var(--font-mono); font-size: 0.8rem; }
+
+        /* hard cover */
+        .cover {
+            left: 50%;
+            z-index: 30;
+            transform-origin: left center;
+            transform: rotateY(0deg);
+            transition: transform 1.15s cubic-bezier(0.65, 0.02, 0.3, 1);
+            backface-visibility: hidden;
+            background:
+                radial-gradient(120% 80% at 30% 20%, #24263a, transparent 60%),
+                linear-gradient(135deg, #191b28, #101119 60%, #0c0d14);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 40px; text-align: center;
+        }
+        .book.open .cover { transform: rotateY(-178deg); pointer-events: none; }
+        .cover .spine { position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: linear-gradient(90deg, rgba(0,0,0,0.5), transparent); }
+        .cover .c-eyebrow { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+        .cover h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.7rem, 4.6vw, 2.6rem); line-height: 1.02; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .cover .c-by { margin-top: 18px; font-family: var(--serif); font-style: italic; color: var(--muted); }
+        .cover .c-foil { width: 54px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); margin: 22px auto; border-radius: 2px; }
+        .cover .open-hint { position: absolute; bottom: 26px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); animation: pulse 2.4s var(--ease) infinite; }
+        @keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* turning leaf (soft page) */
+        .leaf {
+            left: 50%;
+            z-index: 20;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.85s var(--ease);
+            display: none;
+        }
+        .leaf.show { display: block; }
+        .leaf.left-side { left: 0; transform-origin: right center; }
+        .leaf.go { transform: rotateY(-179deg); }
+        .leaf.left-side.go { transform: rotateY(179deg); }
+        .leaf-face { position: absolute; inset: 0; backface-visibility: hidden; overflow: hidden; border-radius: 4px 10px 10px 4px; }
+        .leaf-face.back { transform: rotateY(180deg); border-radius: 10px 4px 4px 10px; }
+        .leaf.left-side .leaf-face.front { border-radius: 10px 4px 4px 10px; }
+        /* moving shadow to sell the curl */
+        .leaf::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.16), transparent 45%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+        .leaf.go::after, .leaf.left-side.go::after { opacity: 1; }
+
+        /* controls */
+        .controls {
+            position: relative; z-index: 5;
+            display: flex; align-items: center; justify-content: center; gap: 18px;
+            padding: 6px 0 18px;
+        }
+        .nav-btn {
+            font-family: var(--font-mono); font-size: 0.8rem;
+            color: var(--text); background: var(--panel); border: 1px solid var(--line);
+            width: 46px; height: 40px; border-radius: 10px; cursor: pointer;
+            transition: border-color 0.2s, opacity 0.2s, transform 0.15s var(--ease);
+        }
+        .nav-btn:hover:not(:disabled) { border-color: rgba(255,255,255,0.2); transform: translateY(-1px); }
+        .nav-btn:disabled { opacity: 0.3; cursor: default; }
+        .counter { font-family: var(--font-mono); font-size: 0.76rem; color: var(--muted); min-width: 70px; text-align: center; }
+
+        /* mobile: single page */
+        @media (max-width: 720px) {
+            .book { width: min(88vw, 460px); height: min(70vh, 640px); }
+            .book.closed { transform: none; }
+            .page, .cover, .leaf { width: 100%; }
+            .page-right { left: 0; }
+            .page-left { display: none; }
+            .cover { left: 0; }
+            .leaf { left: 0; }
+            .paper { padding: 26px 22px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .book, .cover, .leaf { transition: none !important; }
+            .cover .open-hint { animation: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <a href="/#top" class="brand"><span class="dot"></span>jeevan-rai.systems</a>
+        <a href="/blog/" class="back" id="back-btn">← back to writing</a>
+    </div>
+
+    <div class="stage">
+        <div class="book closed" id="book">
+            <!-- static spread -->
+            <div class="page page-left" id="page-left" aria-hidden="true"></div>
+            <div class="page page-right" id="page-right"></div>
+
+            <!-- turning leaf -->
+            <div class="leaf" id="leaf">
+                <div class="leaf-face front" id="leaf-front"></div>
+                <div class="leaf-face back" id="leaf-back"></div>
+            </div>
+
+            <!-- hard cover -->
+            <div class="cover" id="cover" role="button" tabindex="0" aria-label="Open the book">
+                <span class="spine"></span>
+                <div class="c-eyebrow">Notes from the lab</div>
+                <h1>Writing</h1>
+                <div class="c-foil"></div>
+                <div class="c-by">by Jeevan P Rai</div>
+                <div class="open-hint">tap to open ›</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="nav-btn" id="prev" aria-label="Previous page" disabled>‹</button>
+        <span class="counter" id="counter">Closed</span>
+        <button class="nav-btn" id="next" aria-label="Next page" disabled>›</button>
+    </div>
+
+    <script>
+        (function () {
+            var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // ---- content ----
+            var chapters = [
+                { t: "Why I'm writing this", m: "Aug 19 · meta", u: "posts/why-i-write.html",
+                  e: "A home for the things I want to understand properly and say in my own words — where I come from, what I build, and whatever else earns the effort." },
+                { t: "Tulunad Heritage: The Land of Daivas", m: "Aug 19 · heritage", u: "posts/tulunad-heritage-land-of-daivas.html",
+                  e: "A deep, sourced dive into Tulu Nadu — Bhuta Kola and the Daivas, Nagaradhane, the Aati rituals, and the endangered Tulu-Tigalari script." },
+                { t: "Aati: The Month With No Gods", m: "Aug 20 · heritage", u: "posts/aati-the-month-with-no-gods.html",
+                  e: "The one month the Tulu calendar goes silent — the forbidden monsoon month, its wild medicine, and the bitter dawn ritual of Aati Amavasya." },
+                { t: "Nagara Panchami: The Forest We Never Cut", m: "Aug 20 · heritage", u: "posts/nagara-panchami-the-forest-we-never-cut.html",
+                  e: "Every Tuluva family keeps a patch of forest it will never cut — the serpent's grove. A religion that made conservation sacred." },
+                { t: "My Ancestors' Alphabet Just Became Code", m: "Aug 20 · heritage × tech", u: "posts/my-ancestors-alphabet-became-code.html",
+                  e: "Every letter is secretly a number. How the endangered Tulu-Tigalari script earned a permanent place in Unicode — where my two worlds meet." },
+                { t: "My House Was Whispering to Strangers", m: "Aug 20 · technology", u: "posts/my-house-was-whispering-to-strangers.html",
+                  e: "A story about DNS, control, and the evening I found my ad-blocker was a scarecrow — on Pi-hole, unbound, and taking back my network." },
+                { t: "A Cloud of My Own", m: "Aug 21 · technology", u: "posts/a-cloud-of-my-own.html",
+                  e: "Most people rent the cloud. I built one in the corner of my room. On ownership, control, and learning how the internet actually works." }
+            ];
+
+            function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+            // build page HTML strings
+            var pages = [];
+            pages.push('<div class="paper title-page"><div class="eyebrow">A field notebook</div>' +
+                '<h1>Notes from<br>the lab</h1><div class="rule"></div>' +
+                '<div class="by">Heritage, systems &amp; ideas<br>— Jeevan P Rai</div></div>');
+            var toc = '<div class="paper toc"><h2>Contents</h2><div class="lead">Seven pieces. Turn the pages, or tap a title to read.</div><ol>';
+            chapters.forEach(function (c) { toc += '<li><a href="' + c.u + '">' + esc(c.t) + '</a></li>'; });
+            toc += '</ol></div>';
+            pages.push(toc);
+            var roman = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+            chapters.forEach(function (c, i) {
+                pages.push('<div class="paper chap"><div class="num">Chapter ' + roman[i] + '</div>' +
+                    '<h2>' + esc(c.t) + '</h2><div class="meta">' + esc(c.m) + '</div>' +
+                    '<div class="excerpt">' + esc(c.e) + '</div>' +
+                    '<a class="read" href="' + c.u + '">Read the full piece →</a></div>');
+            });
+            pages.push('<div class="paper colophon"><div class="fin">— fin —</div>' +
+                '<div style="font-family:var(--serif);color:var(--paper-muted);margin-bottom:14px;">More is written when there is something worth your time.</div>' +
+                '<a href="/blog/">Back to all writing →</a></div>');
+            // pad to even
+            if (pages.length % 2 !== 0) pages.push('<div class="paper"></div>');
+
+            // ---- elements ----
+            var book = document.getElementById('book');
+            var pageLeft = document.getElementById('page-left');
+            var pageRight = document.getElementById('page-right');
+            var leaf = document.getElementById('leaf');
+            var leafFront = document.getElementById('leaf-front');
+            var leafBack = document.getElementById('leaf-back');
+            var cover = document.getElementById('cover');
+            var prevBtn = document.getElementById('prev');
+            var nextBtn = document.getElementById('next');
+            var counter = document.getElementById('counter');
+
+            var idx = 0;          // left page index (even on desktop)
+            var opened = false;
+            var busy = false;
+            function single() { return matchMedia('(max-width: 720px)').matches; }
+            function step() { return single() ? 1 : 2; }
+
+            function wrap(html, n) {
+                return html + '<div class="pg-num">' + (n + 1) + '</div>';
+            }
+            function render() {
+                if (single()) {
+                    pageRight.innerHTML = wrap(pages[idx] || '<div class="paper"></div>', idx);
+                } else {
+                    pageLeft.innerHTML = wrap(pages[idx] || '<div class="paper"></div>', idx);
+                    pageRight.innerHTML = wrap(pages[idx + 1] || '<div class="paper"></div>', idx + 1);
+                }
+                updateUI();
+            }
+            function updateUI() {
+                prevBtn.disabled = !opened || idx <= 0 || busy;
+                nextBtn.disabled = !opened || idx + step() >= pages.length || busy;
+                if (!opened) { counter.textContent = 'Closed'; }
+                else {
+                    var last = single() ? idx + 1 : idx + 2;
+                    counter.textContent = Math.min(last, pages.length) + ' / ' + pages.length;
+                }
+            }
+
+            function onEnd(el, cb) {
+                var done = false;
+                function fin() { if (done) return; done = true; el.removeEventListener('transitionend', fin); cb(); }
+                el.addEventListener('transitionend', fin);
+                setTimeout(fin, reduce ? 20 : 1000); // fallback
+            }
+
+            function openBook() {
+                if (opened || busy) return;
+                busy = true;
+                book.classList.remove('closed');
+                book.classList.add('open');
+                render();
+                onEnd(cover, function () { opened = true; busy = false; updateUI(); });
+            }
+
+            function next() {
+                if (!opened || busy || idx + step() >= pages.length) return;
+                busy = true; updateUI();
+                var s = step();
+                if (single()) {
+                    leaf.className = 'leaf show';
+                    leafFront.innerHTML = wrap(pages[idx], idx);
+                    leafBack.innerHTML = wrap(pages[idx + 1], idx + 1);
+                    pageRight.innerHTML = wrap(pages[idx + 1] || '', idx + 1);
+                } else {
+                    leaf.className = 'leaf show';
+                    leafFront.innerHTML = wrap(pages[idx + 1], idx + 1);
+                    leafBack.innerHTML = wrap(pages[idx + 2] || '', idx + 2);
+                    pageRight.innerHTML = wrap(pages[idx + 3] || '<div class="paper"></div>', idx + 3);
+                }
+                void leaf.offsetWidth;
+                requestAnimationFrame(function () { leaf.classList.add('go'); });
+                onEnd(leaf, function () { idx += s; leaf.className = 'leaf'; render(); busy = false; updateUI(); });
+            }
+
+            function prev() {
+                if (!opened || busy || idx <= 0) return;
+                busy = true; updateUI();
+                var s = step();
+                if (single()) {
+                    leaf.className = 'leaf left-side show';
+                    leafFront.innerHTML = wrap(pages[idx], idx);
+                    leafBack.innerHTML = wrap(pages[idx - 1], idx - 1);
+                    pageRight.innerHTML = wrap(pages[idx - 1] || '', idx - 1);
+                } else {
+                    leaf.className = 'leaf left-side show';
+                    leafFront.innerHTML = wrap(pages[idx], idx);
+                    leafBack.innerHTML = wrap(pages[idx - 1], idx - 1);
+                    pageLeft.innerHTML = wrap(pages[idx - 2] || '<div class="paper"></div>', idx - 2);
+                }
+                void leaf.offsetWidth;
+                requestAnimationFrame(function () { leaf.classList.add('go'); });
+                onEnd(leaf, function () { idx -= s; leaf.className = 'leaf'; render(); busy = false; updateUI(); });
+            }
+
+            cover.addEventListener('click', openBook);
+            cover.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBook(); } });
+            nextBtn.addEventListener('click', next);
+            prevBtn.addEventListener('click', prev);
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowRight') next();
+                else if (e.key === 'ArrowLeft') prev();
+                else if (e.key === 'Escape') window.location.href = '/blog/';
+            });
+
+            // basic swipe
+            var sx = 0;
+            book.addEventListener('touchstart', function (e) { sx = e.changedTouches[0].clientX; }, { passive: true });
+            book.addEventListener('touchend', function (e) {
+                var dx = e.changedTouches[0].clientX - sx;
+                if (Math.abs(dx) < 45) return;
+                if (!opened) { openBook(); return; }
+                if (dx < 0) next(); else prev();
+            }, { passive: true });
+
+            // resize: keep index on an even boundary for desktop spreads
+            var wasSingle = single();
+            addEventListener('resize', function () {
+                var now = single();
+                if (now !== wasSingle) {
+                    wasSingle = now;
+                    if (!now && idx % 2 !== 0) idx -= 1; // snap to spread
+                    leaf.className = 'leaf'; busy = false;
+                    if (opened) render(); else updateUI();
+                }
+            });
+
+            updateUI();
+        })();
+    </script>
+</body>
+
+</html>
