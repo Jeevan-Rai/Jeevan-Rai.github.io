@@ -6,51 +6,59 @@
     <atom:link href="https://portfolio.kronos-nexus.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Essays and field notes — the culture and heritage of Tulu Nadu, the systems I build, and ideas worth thinking through properly. Researched and sourced.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 20 Aug 2026 18:00:00 +0530</lastBuildDate>
+    <lastBuildDate>Fri, 21 Aug 2026 10:00:00 +0530</lastBuildDate>
+    <item>
+      <title>A Cloud of My Own</title>
+      <link>https://portfolio.kronos-nexus.com/posts/a-cloud-of-my-own.html</link>
+      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/posts/a-cloud-of-my-own.html</guid>
+      <pubDate>Fri, 21 Aug 2026 10:00:00 +0530</pubDate>
+      <category>Technology</category>
+      <description>Most people rent the cloud. I built one in the corner of my room. On why I run a homelab — ownership, control, and learning how the internet actually works.</description>
+    </item>
     <item>
       <title>My Ancestors&#x27; Alphabet Just Became Code</title>
-      <link>https://portfolio.kronos-nexus.com/blog/posts/my-ancestors-alphabet-became-code.html</link>
-      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/blog/posts/my-ancestors-alphabet-became-code.html</guid>
+      <link>https://portfolio.kronos-nexus.com/posts/my-ancestors-alphabet-became-code.html</link>
+      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/posts/my-ancestors-alphabet-became-code.html</guid>
       <pubDate>Thu, 20 Aug 2026 18:00:00 +0530</pubDate>
       <category>Culture &amp; Technology</category>
       <description>How the endangered Tulu-Tigalari script got into Unicode — where heritage and engineering meet.</description>
     </item>
     <item>
       <title>Nagara Panchami: The Forest We Never Cut</title>
-      <link>https://portfolio.kronos-nexus.com/blog/posts/nagara-panchami-the-forest-we-never-cut.html</link>
-      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/blog/posts/nagara-panchami-the-forest-we-never-cut.html</guid>
+      <link>https://portfolio.kronos-nexus.com/posts/nagara-panchami-the-forest-we-never-cut.html</link>
+      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/posts/nagara-panchami-the-forest-we-never-cut.html</guid>
       <pubDate>Thu, 20 Aug 2026 17:00:00 +0530</pubDate>
       <category>Culture &amp; Heritage</category>
       <description>Every Tuluva family keeps a patch of forest it will never cut — the serpent&#x27;s grove. Nagara Panchami and the sacred ecology of Tulu Nadu.</description>
     </item>
     <item>
       <title>Aati: The Month With No Gods</title>
-      <link>https://portfolio.kronos-nexus.com/blog/posts/aati-the-month-with-no-gods.html</link>
-      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/blog/posts/aati-the-month-with-no-gods.html</guid>
+      <link>https://portfolio.kronos-nexus.com/posts/aati-the-month-with-no-gods.html</link>
+      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/posts/aati-the-month-with-no-gods.html</guid>
       <pubDate>Thu, 20 Aug 2026 12:00:00 +0530</pubDate>
       <category>Culture &amp; Heritage</category>
       <description>The one month the Tulu calendar goes silent — Tulu Nadu&#x27;s forbidden monsoon month, its wild medicine, and the bitter ritual of Aati Amavasya.</description>
     </item>
     <item>
       <title>My House Was Whispering to Strangers</title>
-      <link>https://portfolio.kronos-nexus.com/blog/posts/my-house-was-whispering-to-strangers.html</link>
-      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/blog/posts/my-house-was-whispering-to-strangers.html</guid>
+      <link>https://portfolio.kronos-nexus.com/posts/my-house-was-whispering-to-strangers.html</link>
+      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/posts/my-house-was-whispering-to-strangers.html</guid>
       <pubDate>Thu, 20 Aug 2026 10:00:00 +0530</pubDate>
       <category>Technology</category>
       <description>A story about DNS, control, and the evening I realised my ad-blocker was a scarecrow — on Pi-hole, unbound, and taking back my network.</description>
     </item>
     <item>
       <title>Tulunad Heritage: The Land of Daivas</title>
-      <link>https://portfolio.kronos-nexus.com/blog/posts/tulunad-heritage-land-of-daivas.html</link>
-      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/blog/posts/tulunad-heritage-land-of-daivas.html</guid>
+      <link>https://portfolio.kronos-nexus.com/posts/tulunad-heritage-land-of-daivas.html</link>
+      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/posts/tulunad-heritage-land-of-daivas.html</guid>
       <pubDate>Wed, 19 Aug 2026 12:00:00 +0530</pubDate>
       <category>Culture &amp; Heritage</category>
       <description>A deep, sourced dive into Tulu Nadu — Bhuta Kola, the Daivas, Nagaradhane, the Aati rituals, and the endangered Tulu-Tigalari script.</description>
     </item>
     <item>
       <title>Why I&#x27;m writing this</title>
-      <link>https://portfolio.kronos-nexus.com/blog/posts/why-i-write.html</link>
-      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/blog/posts/why-i-write.html</guid>
+      <link>https://portfolio.kronos-nexus.com/posts/why-i-write.html</link>
+      <guid isPermaLink="true">https://portfolio.kronos-nexus.com/posts/why-i-write.html</guid>
       <pubDate>Wed, 19 Aug 2026 10:00:00 +0530</pubDate>
       <category>Meta</category>
       <description>A home for the things I want to understand properly and say in my own words — heritage, technology, and ideas, always with sources.</description>
