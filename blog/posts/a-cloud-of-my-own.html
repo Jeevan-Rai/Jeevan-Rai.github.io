@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Cloud of My Own — Why I Run a Homelab | Jeevan P Rai</title>
+    <meta name="description"
+        content="Most people rent the cloud. I built one in the corner of my room. A personal essay on why I run a homelab — ownership, control, and learning how the internet actually works by hosting it yourself.">
+    <meta name="keywords"
+        content="homelab, self-hosting, home server, self-hosted, virtualization, Proxmox, home data centre, DIY cloud, network, infrastructure, homelab setup">
+    <meta name="author" content="Jeevan P Rai">
+    <link rel="canonical" href="https://portfolio.kronos-nexus.com/blog/posts/a-cloud-of-my-own.html">
+    <meta property="og:title" content="A Cloud of My Own — Why I Run a Homelab">
+    <meta property="og:description"
+        content="Most people rent the cloud. I built one in the corner of my room. On ownership, control, and learning how the internet actually works.">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2026-08-21">
+    <meta property="article:section" content="Technology">
+    <meta property="og:image" content="https://portfolio.kronos-nexus.com/blog/img/homelab-tower.jpg">
+    <meta property="og:url" content="https://portfolio.kronos-nexus.com/blog/posts/a-cloud-of-my-own.html">
+    <meta name="robots" content="index, follow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../blog.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="nav">
+            <a href="/#top" class="brand"><span class="dot"></span>jeevan-rai<span class="sub">.systems</span></a>
+            <a href="/blog/" class="nav-back">← all writing</a>
+        </div>
+    </header>
+
+    <main>
+        <article class="wrap article">
+            <header class="article-header">
+                <div class="post-meta">
+                    <span>Aug 21, 2026</span>
+                    <span>· 8 min read</span>
+                    <span>· technology</span>
+                </div>
+                <h1>A Cloud of My Own</h1>
+                <p class="article-lede">Most people rent the cloud — a slice of some company's warehouse, hundreds
+                    of miles away, that they'll never see. I built one in the corner of my room. This is why.</p>
+            </header>
+
+            <div class="prose">
+                <p>There is a corner of my room that hums.</p>
+
+                <p>Not loudly — a low, steady sound, the kind you stop hearing after a week and only notice again
+                    when it stops. It comes from a small stack of machines that quietly run a surprising amount of my
+                    life: the files I keep, the code I write, the things my devices ask the internet, the little
+                    services I've stopped renting from other people. People have a name for this hobby that makes it
+                    sound more official than it is. They call it a <strong>homelab.</strong></p>
+
+                <figure>
+                    <img src="../img/homelab-tower.jpg" width="1210" height="1391"
+                        alt="A glass-panelled computer tower glowing with RGB-lit fans, part of a home server setup, beside a UPS battery backup — the corner of a room running like a small data centre">
+                    <figcaption>The corner that hums. Glass, fans, and a battery backup keeping watch.</figcaption>
+                </figure>
+
+                <h2>What it actually is</h2>
+                <p>Stripped of the jargon, a homelab is simple: instead of paying a big company to run software
+                    <em>for</em> you, on machines <em>they</em> own, in a building <em>you'll</em> never enter — you
+                    run it yourself, at home, on hardware you can reach out and touch.</p>
+
+                <p>One physical machine can pretend to be many. A single box, with the right software, splits itself
+                    into a dozen smaller virtual computers, each doing one job, each isolated from the others — so
+                    if one falls over, the rest don't notice. The network gets divided up the same way, into
+                    separate lanes, so the things that should never talk to each other simply can't. The result is
+                    that a corner of an ordinary room starts to behave like a very small, very personal data
+                    centre.</p>
+
+                <p>And once you have that, the temptation is irresistible: to stop renting. The photo backup, the
+                    file sync, the private git for your own projects, the thing that filters ads for the whole house
+                    — one by one, you bring them home. You replace "a service someone else runs" with "a service I
+                    run," and the corner fills up, and the hum gets a little deeper.</p>
+
+                <blockquote>Half of engineering is understanding systems. The other half is the strange, stubborn
+                    urge to <em>own</em> the ones you depend on. A homelab is that second half, wearing fairy
+                    lights.</blockquote>
+
+                <h2>Why bother, honestly</h2>
+                <p>The cloud is cheap, reliable, and someone else's problem. So why do this?</p>
+
+                <p>The first answer is <strong>learning</strong>, and it's the real one. You do not understand how
+                    the internet works until you have hosted a piece of it and watched it break. Renting a service
+                    teaches you a dashboard. Running one teaches you the whole stack underneath — the network, the
+                    storage, the certificates, the thousand small things that the dashboard was hiding. Every outage
+                    in that corner of my room is a lesson I paid for in frustration and now own forever. My day job
+                    is building reliable systems; this is where I learned, and keep learning, what reliable actually
+                    costs.</p>
+
+                <p>The second answer is <strong>control</strong>, which matters more to me every year. When a
+                    service lives on someone else's computer, you live by their terms — their price changes, their
+                    shutdowns, their quiet decisions about your data. When it lives in your room, it answers to you.
+                    One of the machines in that corner does nothing but resolve the questions every device in my
+                    home asks the internet, so those questions stay home instead of being handed to strangers — I
+                    wrote about that one on its own, in
+                    <a href="my-house-was-whispering-to-strangers.html">My House Was Whispering to Strangers</a>. It's
+                    one room in this larger house.</p>
+
+                <p>The third answer is harder to defend and the most honest: it's <em>mine.</em> There is a specific,
+                    slightly childish joy in walking past a corner of your room and knowing that the small city of
+                    services humming there — the backups, the code, the filtering, the files — is something you
+                    built, understand, and keep. Not rented. Kept.</p>
+
+                <h2>The discipline it teaches</h2>
+                <p>A homelab is also a patient teacher of humility, because you are now the whole IT department, and
+                    the IT department gets no weekends off.</p>
+
+                <p>When you own the machine, you own the 2 a.m. failure. A drive fills up, a service crashes, an
+                    update goes wrong, the power flickers — and there's no support line, just you. So you learn the
+                    unglamorous virtues the hard way: keep backups, and test them, because a backup you've never
+                    restored is just a hope. Assume things will fail, and design so that when one does, the rest
+                    keep going. Put a battery between your machines and the wall, because the grid does not care
+                    about your uptime. (That's the other black box in the photo — a UPS, quietly holding the line
+                    every time the power stutters.)</p>
+
+                <blockquote>The cloud sells you the illusion that infrastructure is effortless. A homelab sells you
+                    the truth: it's effort all the way down, and worth it.</blockquote>
+
+                <p>None of this is critical to survival. I could rent all of it back tomorrow and my life would run
+                    fine. But I'd understand it less, control it less, and — this is the part that's hard to
+                    explain to people who don't feel it — I'd <em>own</em> less of my own digital life. The corner
+                    would go quiet, and something would be missing.</p>
+
+                <h2>The hum, and what it means</h2>
+                <p>I've written on this blog about a coast that taught itself to <a
+                        href="nagara-panchami-the-forest-we-never-cut.html">keep a forest it would never cut</a>, and
+                    a month that <a href="aati-the-month-with-no-gods.html">built thrift and healing into the
+                        calendar</a> — about people who understood that the things you truly depend on are the
+                    things you keep close and tend yourself. I don't think it's a coincidence that I ended up
+                    building a small, humming version of exactly that, in a corner of a room, out of glass and fans
+                    and stubbornness.</p>
+
+                <p>It's the same instinct in a different century. Keep what you depend on. Understand it. Tend it.
+                    Own it, end to end, root to leaf — even if it hums at night, even if it wakes you at 2 a.m., even
+                    if the cloud would do it cheaper. Especially then.</p>
+
+                <p>The corner of my room hums. It's the sound of a cloud I actually own.</p>
+
+                <hr>
+
+                <h2 id="notes">Notes</h2>
+                <p style="color:var(--muted-2);font-size:0.9rem;">I've deliberately kept the specifics of my own
+                    setup out of this — no addresses, no map, no inventory. If you want to start your own, the
+                    community is generous and the barrier is lower than it looks:</p>
+                <ol class="refs">
+                    <li>The virtualization layer most homelabs are built on — <a
+                            href="https://www.proxmox.com/en/proxmox-virtual-environment/overview" target="_blank"
+                            rel="noopener">Proxmox VE</a> — is free and open-source.</li>
+                    <li>For ideas on what to actually self-host, <a
+                            href="https://github.com/awesome-selfhosted/awesome-selfhosted" target="_blank"
+                            rel="noopener">awesome-selfhosted</a> is the canonical list, and the <a
+                            href="https://www.reddit.com/r/selfhosted/" target="_blank" rel="noopener">r/selfhosted</a>
+                        community is where people share and troubleshoot.</li>
+                </ol>
+            </div>
+
+            <footer class="article-footer">
+                <span><img class="byline-avatar" src="../img/jeevan.jpg" width="34" height="34"
+                        alt="Jeevan P Rai"> Jeevan P Rai</span>
+                <a href="/blog/" class="nav-back">← all writing</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        © 2026 Jeevan P Rai · Powered by Kronos-Nexus Infrastructure
+    </footer>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "A Cloud of My Own — Why I Run a Homelab",
+        "description": "Most people rent the cloud. I built one in the corner of my room. A personal essay on why I run a homelab — ownership, control, and learning how the internet actually works.",
+        "datePublished": "2026-08-21",
+        "image": "https://portfolio.kronos-nexus.com/blog/img/homelab-tower.jpg",
+        "author": {
+            "@type": "Person",
+            "name": "Jeevan P Rai",
+            "url": "https://portfolio.kronos-nexus.com"
+        },
+        "keywords": "homelab, self-hosting, home server, self-hosted, virtualization, Proxmox, DIY cloud, infrastructure",
+        "articleSection": "Technology",
+        "mainEntityOfPage": "https://portfolio.kronos-nexus.com/blog/posts/a-cloud-of-my-own.html"
+    }
+    </script>
+</body>
+
+</html>
