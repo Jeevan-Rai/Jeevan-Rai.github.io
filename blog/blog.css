@@ -111,6 +111,26 @@ a:hover { color: var(--accent); }
 }
 .blog-hero p { color: var(--muted); max-width: 52ch; font-size: 1.05rem; }
 
+/* ---- Read-as-a-book CTA ---- */
+.book-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.6rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 12px;
+    border: 1px solid var(--line-strong);
+    background: linear-gradient(135deg, var(--panel-2), var(--panel));
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    box-shadow: 0 6px 22px rgba(124, 138, 255, 0.14);
+    transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.book-cta:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--text); }
+.book-cta .ico { font-size: 1.05rem; }
+.book-cta .arw { color: var(--muted-2); }
+
 /* ---- Author card + framed avatar ---- */
 .author {
     display: flex;
