@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <title>The Book — Writing by Jeevan P Rai</title>
     <meta name="description" content="Read Jeevan P Rai's writing as a book — a field notebook of Tulu Nadu heritage, systems, and ideas.">
     <meta name="robots" content="noindex, follow">
@@ -118,6 +119,10 @@
         }
         .page-left { left: 0; border-radius: 10px 4px 4px 10px; }
         .page-right { left: 50%; }
+        /* pages stay hidden until the cover swings open, so the cover opens first */
+        .page { opacity: 0; }
+        .book.open .page-right { opacity: 1; transition: opacity 0.3s ease 0.28s; }
+        .book.open .page-left { opacity: 1; transition: opacity 0.35s ease 0.62s; }
 
         /* paper look */
         .paper {
@@ -165,13 +170,13 @@
         .toc a { color: var(--paper-ink); text-decoration: none; }
         .toc a:hover { color: var(--paper-accent); }
 
-        .chap { justify-content: flex-start; }
+        .chap { justify-content: center; text-align: center; }
         .chap .num { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-accent); margin-bottom: 18px; }
         .chap h2 { font-size: clamp(1.3rem, 3vw, 1.75rem); line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 10px; }
         .chap .meta { font-family: var(--font-mono); font-size: 0.7rem; color: var(--paper-muted); margin-bottom: 18px; }
-        .chap .excerpt { font-family: var(--serif); font-size: 1rem; line-height: 1.55; color: #4a4436; flex: 1; }
+        .chap .excerpt { font-family: var(--serif); font-size: 1rem; line-height: 1.55; color: #4a4436; max-width: 30ch; margin: 0 auto; }
         .chap .read {
-            align-self: flex-start; margin-top: 18px;
+            align-self: center; margin-top: 22px;
             font-family: var(--font-mono); font-size: 0.76rem; text-decoration: none;
             color: #fff; background: var(--paper-accent);
             padding: 9px 15px; border-radius: 8px;
