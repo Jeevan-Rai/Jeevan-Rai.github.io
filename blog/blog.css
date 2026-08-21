@@ -375,8 +375,8 @@ a:hover { color: var(--accent); }
 }
 
 @media (max-width: 640px) {
-    .wrap { padding: 0 1.15rem; }
-    .nav { padding: 0.85rem 1.15rem; }
+    .wrap { padding: 0 1.3rem; }
+    .nav { padding: 0.85rem 1.3rem; }
     .blog-hero { padding: 2.6rem 0 1.8rem; }
     .blog-hero p { font-size: 1rem; }
     .article { padding: 2.6rem 0 1.5rem; }
