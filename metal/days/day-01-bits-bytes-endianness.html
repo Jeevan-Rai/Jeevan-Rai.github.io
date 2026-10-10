@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Bits, Bytes &amp; Endianness — To the Metal, Day 01</title>
+    <meta name="description"
+        content="Binary, octal and hexadecimal from first principles. Every Python and Rust bitwise operator with worked column arithmetic, the bit-manipulation idiom table, why n &amp; -n isolates the lowest set bit, byte order, and the real cost of bitwise work in CPython.">
+    <meta name="author" content="Jeevan P Rai">
+    <link rel="canonical" href="https://portfolio.kronos-nexus.com/metal/days/day-01-bits-bytes-endianness.html">
+    <meta property="og:title" content="Bits, Bytes &amp; Endianness — To the Metal, Day 01">
+    <meta property="og:description"
+        content="Number bases from first principles, every bitwise operator worked by hand, the idiom table, and what your CPU actually executes.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://portfolio.kronos-nexus.com/metal/days/day-01-bits-bytes-endianness.html">
+    <meta name="robots" content="index, follow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../metal.css">
+</head>
+
+<body>
+    <div class="progress" id="progress"></div>
+    <header class="site-header">
+        <div class="nav">
+            <a href="/#top" class="brand"><span class="dot"></span>jeevan-rai<span class="sub">.systems</span></a>
+            <a href="/metal/" class="nav-back">&larr; all fifty days</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="eyebrow">Day 01 &middot; Phase 1 &middot; Representation</div>
+            <h1>Bits, Bytes &amp; Endianness</h1>
+            <p class="lede">Everything in the next forty-nine days sits on top of this. We start at place value and
+                finish at the instructions your processor actually issues &mdash; <strong>assuming nothing in
+                between.</strong></p>
+        </section>
+
+        <article>
+            <div class="toc">
+                <div class="lbl">On this page</div>
+                <ol>
+                    <li><a href="#a1">Syntax &mdash; bases, operators, methods</a></li>
+                    <li><a href="#a2">Semantics &mdash; the idioms and why they work</a></li>
+                    <li><a href="#a3">Machine &mdash; bytes, byte order, ARM64</a></li>
+                    <li><a href="#a4">Cost &mdash; what this is actually worth</a></li>
+                    <li><a href="#practice">Practice questions</a></li>
+                    <li><a href="#problems">Coding problems</a></li>
+                </ol>
+            </div>
+
+            <!-- ============ ALTITUDE 1 ============ -->
+            <div class="alt-head alt-1" id="a1">
+                <span class="badge">Altitude 1</span>
+                <h2>Syntax</h2>
+            </div>
+
+            <p>A computer stores every integer as a row of <strong>bits</strong> &mdash; switches that are either
+                <code>0</code> or <code>1</code>. Bitwise operators work on those individual switches rather than on
+                the number as a whole. To use them you need to read the same number in several bases, so that is
+                where we start.</p>
+
+            <h3>Place value, and why bases exist</h3>
+
+            <p>In ordinary decimal, each column is worth ten times the one to its right. The number 237 means
+                <code>2&times;100 + 3&times;10 + 7&times;1</code>. Nothing about that is fundamental &mdash; ten is
+                just how many fingers we have. Change the multiplier and you change the base.</p>
+
+            <h4>Binary &mdash; base 2</h4>
+            <p>Each column is worth twice the one to its right. Python writes binary literals with an
+                <code>0b</code> prefix:</p>
+            <pre><span class="n">0b1011</span></pre>
+            <p>Read it by columns:</p>
+            <pre>  1   0   1   1
+  <span class="c">↓   ↓   ↓   ↓</span>
+  8   4   2   1     <span class="c">← place values</span>
+
+  8 + 0 + 2 + 1  =  <span class="hl">11</span></pre>
+            <p>So <code>0b1011</code> and <code>11</code> are the same integer written two ways. Python will confirm
+                it:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> 0b1011 == 11
+<span class="n">True</span></pre>
+
+            <h4>Octal &mdash; base 8</h4>
+            <p>Columns worth 1, 8, 64, 512. Prefix <code>0o</code>:</p>
+            <pre><span class="n">0o17</span>
+
+  1   7
+  <span class="c">↓   ↓</span>
+  8   1
+
+  1&times;8 + 7&times;1  =  <span class="hl">15</span></pre>
+            <p>Octal is mostly a historical curiosity now, with one survivor you use constantly: Unix file
+                permissions. <code>chmod 755</code> is octal, and each digit is three bits of
+                read/write/execute.</p>
+
+            <h4>Hexadecimal &mdash; base 16</h4>
+            <p>Columns worth 1, 16, 256, 4096. Prefix <code>0x</code>. Base 16 needs sixteen digit symbols and we
+                only have ten, so the last six are letters:</p>
+            <div class="tw">
+                <table>
+                    <tr>
+                        <th>Hex</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th>
+                        <th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Dec</strong></td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>
+                        <td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td>
+                        <td>14</td><td>15</td>
+                    </tr>
+                </table>
+            </div>
+            <p>So:</p>
+            <pre><span class="n">0xff</span>
+
+  F    F
+  <span class="c">↓    ↓</span>
+  16   1
+
+  15&times;16 + 15&times;1  =  240 + 15  =  <span class="hl">255</span></pre>
+
+            <div class="note key">
+                <span class="lbl">Why hex and not decimal</span>
+                <p>One hex digit is <em>exactly</em> four bits. Four bits have sixteen possible values, and hex has
+                    sixteen digits &mdash; they line up perfectly. So two hex digits are exactly one byte, with no
+                    arithmetic needed:</p>
+                <pre><span class="n">0xF</span> = <span class="n">1111</span>      <span class="n">0xA</span> = <span class="n">1010</span>      <span class="n">0x3</span> = <span class="n">0011</span>
+<span class="n">0xFF</span> = <span class="n">1111 1111</span>   <span class="c">← one byte, read straight off</span></pre>
+                <p>Decimal has no such alignment &mdash; 255 tells you nothing about its bits at a glance. That is
+                    the entire reason every memory dump, colour code, MAC address, IPv6 address and hash you have
+                    ever seen is written in hex.</p>
+                <p><strong>Worth memorising:</strong> the sixteen nibbles, both directions. It is rote, it takes
+                    twenty minutes, and it pays off for the rest of this course.</p>
+            </div>
+
+            <h3>Converting between bases in Python</h3>
+
+            <p>Three built-ins convert <em>from</em> an integer:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> bin(11)
+<span class="s">'0b1011'</span>
+<span class="k">&gt;&gt;&gt;</span> oct(15)
+<span class="s">'0o17'</span>
+<span class="k">&gt;&gt;&gt;</span> hex(255)
+<span class="s">'0xff'</span></pre>
+
+            <div class="note trap">
+                <span class="lbl">Catch</span>
+                <p>All three return <strong>strings</strong>, not numbers &mdash; prefix included.</p>
+                <pre><span class="k">&gt;&gt;&gt;</span> type(bin(11))
+<span class="k">&lt;class</span> <span class="s">'str'</span><span class="k">&gt;</span>
+<span class="k">&gt;&gt;&gt;</span> bin(11) + 1
+TypeError: can only concatenate str (not <span class="s">"int"</span>) to str</pre>
+            </div>
+
+            <p>And <code>int()</code> converts the other way, taking the base as its second argument:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> int(<span class="s">'ff'</span>, 16)      <span class="c"># read 'ff' as base 16</span>
+<span class="n">255</span>
+<span class="k">&gt;&gt;&gt;</span> int(<span class="s">'1011'</span>, 2)
+<span class="n">11</span>
+<span class="k">&gt;&gt;&gt;</span> int(<span class="s">'17'</span>, 8)
+<span class="n">15</span>
+<span class="k">&gt;&gt;&gt;</span> int(<span class="s">'0xff'</span>, 16)    <span class="c"># prefix is tolerated</span>
+<span class="n">255</span>
+<span class="k">&gt;&gt;&gt;</span> int(<span class="s">'ff'</span>, 0)       <span class="c"># base 0 = infer from prefix; no prefix here, so:</span>
+ValueError: invalid literal <span class="k">for</span> int() with base 0: <span class="s">'ff'</span></pre>
+
+            <p>The same digit string means different numbers in different bases, which is the whole point:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> int(<span class="s">'1010'</span>, 2), int(<span class="s">'1010'</span>, 10), int(<span class="s">'1010'</span>, 16)
+(<span class="n">10</span>, <span class="n">1010</span>, <span class="n">4112</span>)</pre>
+
+            <h3><code>format()</code> &mdash; padded binary for reading bits</h3>
+
+            <p><code>bin()</code> is awkward when you want to line bits up, because it strips leading zeros and adds
+                a prefix. <code>format()</code> fixes both:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> format(11, <span class="s">'08b'</span>)
+<span class="s">'00001011'</span></pre>
+            <p>The format spec reads right to left:</p>
+            <pre>  <span class="s">'08b'</span>
+   <span class="c">│││</span>
+   <span class="c">││└──</span> b  = render in binary
+   <span class="c">│└───</span> 8  = minimum total width
+   <span class="c">└────</span> 0  = pad with zeros (not spaces)</pre>
+            <p>Compare the three:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> format(11, <span class="s">'b'</span>)      <span class="c"># no padding</span>
+<span class="s">'1011'</span>
+<span class="k">&gt;&gt;&gt;</span> format(11, <span class="s">'8b'</span>)     <span class="c"># pad to 8 with SPACES</span>
+<span class="s">'    1011'</span>
+<span class="k">&gt;&gt;&gt;</span> format(11, <span class="s">'08b'</span>)    <span class="c"># pad to 8 with ZEROS</span>
+<span class="s">'00001011'</span>
+<span class="k">&gt;&gt;&gt;</span> format(11, <span class="s">'016b'</span>)   <span class="c"># 16-bit view</span>
+<span class="s">'0000000000001011'</span></pre>
+            <p>This is the tool you will reach for every time you want to see what an operator did. Keep it
+                nearby.</p>
+
+            <h3>The six bitwise operators</h3>
+
+            <p>For every example below, these two numbers:</p>
+            <pre>n = 11 = <span class="n">1011</span>
+m =  5 = <span class="n">0101</span></pre>
+            <p>The operators compare the two rows <strong>column by column, independently</strong>. No column
+                affects any other &mdash; that is what makes them different from arithmetic, where carries
+                propagate.</p>
+
+            <h4><code>&amp;</code> &mdash; AND</h4>
+            <p>A column is <code>1</code> only when <em>both</em> bits are <code>1</code>.</p>
+            <div class="tw">
+                <table class="truth">
+                    <tr><th>A</th><th>B</th><th>A &amp; B</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>1</td><td class="y">1</td></tr>
+                </table>
+            </div>
+            <pre>    1011   <span class="c">(11)</span>
+ &amp;  0101   <span class="c">(5)</span>
+ ────────
+    0001   <span class="c">(1)</span>
+
+<span class="k">&gt;&gt;&gt;</span> 11 &amp; 5
+<span class="n">1</span></pre>
+            <p><strong>Use it to ask questions.</strong> AND with a mask keeps only the bits you care about and
+                zeroes everything else.</p>
+
+            <h4><code>|</code> &mdash; OR</h4>
+            <p>A column is <code>1</code> when <em>at least one</em> bit is <code>1</code>.</p>
+            <div class="tw">
+                <table class="truth">
+                    <tr><th>A</th><th>B</th><th>A | B</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td class="y">1</td></tr>
+                    <tr><td>1</td><td>0</td><td class="y">1</td></tr>
+                    <tr><td>1</td><td>1</td><td class="y">1</td></tr>
+                </table>
+            </div>
+            <pre>    1011   <span class="c">(11)</span>
+ |  0101   <span class="c">(5)</span>
+ ────────
+    1111   <span class="c">(15)</span>
+
+<span class="k">&gt;&gt;&gt;</span> 11 | 5
+<span class="n">15</span></pre>
+            <p><strong>Use it to add bits.</strong> OR turns bits on and never turns any off.</p>
+
+            <h4><code>^</code> &mdash; XOR (exclusive or)</h4>
+            <p>A column is <code>1</code> when the two bits <em>differ</em>.</p>
+            <div class="tw">
+                <table class="truth">
+                    <tr><th>A</th><th>B</th><th>A ^ B</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td class="y">1</td></tr>
+                    <tr><td>1</td><td>0</td><td class="y">1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td></tr>
+                </table>
+            </div>
+            <pre>    1011   <span class="c">(11)</span>
+ ^  0101   <span class="c">(5)</span>
+ ────────
+    1110   <span class="c">(14)</span>
+
+<span class="k">&gt;&gt;&gt;</span> 11 ^ 5
+<span class="n">14</span></pre>
+            <p><strong>Use it to flip bits, and to cancel things out.</strong> XOR is the operator with real
+                algebra behind it, which we come back to in the next section &mdash; it is the engine behind both of
+                today's problems.</p>
+
+            <h4><code>~</code> &mdash; NOT</h4>
+            <p>Flips every bit. This is the one that surprises everybody:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> ~11
+<span class="n">-12</span></pre>
+            <p>You might have expected 4, reasoning that <code>1011</code> inverted is <code>0100</code>. The
+                answer is &minus;12 because <strong>Python integers have no fixed width.</strong> There is no
+                8-bit or 32-bit box for the flipped bits to live in &mdash; conceptually the number extends
+                leftwards forever, so inverting it flips infinitely many leading zeros into leading ones, which is
+                how negative numbers are represented.</p>
+            <p>The identity to remember:</p>
+            <pre>~n  ==  -(n + 1)
+
+<span class="k">&gt;&gt;&gt;</span> ~0, ~5, ~11, ~100
+(<span class="n">-1</span>, <span class="n">-6</span>, <span class="n">-12</span>, <span class="n">-101</span>)</pre>
+            <p>Day 02 explains <em>why</em> that identity holds, when we do two's complement properly. For now,
+                treat it as a fact and note the practical consequence: <strong>in Python, if you want a bounded NOT
+                you must supply the bound yourself</strong> by masking:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> ~11 &amp; 0xFF          <span class="c"># NOT within 8 bits</span>
+<span class="n">244</span>
+<span class="k">&gt;&gt;&gt;</span> format(244, <span class="s">'08b'</span>)
+<span class="s">'11110100'</span>            <span class="c"># 00001011 inverted, as expected</span></pre>
+
+            <h4><code>&lt;&lt;</code> &mdash; left shift</h4>
+            <p>Moves every bit left by <em>k</em> places, filling in zeros on the right.</p>
+            <pre>11 = <span class="n">1011</span>
+
+11 &lt;&lt; 1:   <span class="n">1011</span> → <span class="n">10110</span>    = 16+4+2   = <span class="hl">22</span>
+11 &lt;&lt; 2:   <span class="n">1011</span> → <span class="n">101100</span>   = 32+8+4   = <span class="hl">44</span>
+11 &lt;&lt; 3:   <span class="n">1011</span> → <span class="n">1011000</span>  = 64+16+8  = <span class="hl">88</span></pre>
+            <p>Shifting left by one doubles the number, because every bit moves into a column worth twice as
+                much:</p>
+            <pre>n &lt;&lt; k  ==  n &times; 2<span class="k">**</span>k
+
+<span class="k">&gt;&gt;&gt;</span> 11 &lt;&lt; 1, 11 &lt;&lt; 2, 11 &lt;&lt; 3
+(<span class="n">22</span>, <span class="n">44</span>, <span class="n">88</span>)
+<span class="k">&gt;&gt;&gt;</span> 1 &lt;&lt; 10            <span class="c"># the idiomatic way to write 1024</span>
+<span class="n">1024</span></pre>
+            <p><code>1 &lt;&lt; k</code> builds a number with a single bit set at position <em>k</em>. That is the most
+                useful shift in practice and you will see it in every idiom below.</p>
+
+            <h4><code>&gt;&gt;</code> &mdash; right shift</h4>
+            <p>Moves every bit right by <em>k</em> places. Bits that fall off the right-hand end are
+                <strong>discarded</strong>, which makes this lossy.</p>
+            <pre>11 = <span class="n">1011</span>
+
+11 &gt;&gt; 1:   <span class="n">1011</span> → <span class="n">101</span>    = 4+1  = <span class="hl">5</span>    <span class="c">(the final 1 was dropped)</span>
+11 &gt;&gt; 2:   <span class="n">1011</span> → <span class="n">10</span>     = 2     = <span class="hl">2</span>
+11 &gt;&gt; 3:   <span class="n">1011</span> → <span class="n">1</span>      = 1     = <span class="hl">1</span></pre>
+            <p>For non-negative integers this is floor division by a power of two:</p>
+            <pre>n &gt;&gt; k  ==  n // 2<span class="k">**</span>k      <span class="c"># for n ≥ 0</span>
+
+<span class="k">&gt;&gt;&gt;</span> 20 &gt;&gt; 1, 20 &gt;&gt; 2, 20 &gt;&gt; 3
+(<span class="n">10</span>, <span class="n">5</span>, <span class="n">2</span>)</pre>
+            <div class="note trap">
+                <span class="lbl">Trap</span>
+                <p><code>&gt;&gt;</code> is <em>floor</em> division, not truncation, and the difference shows up on
+                    negatives. Python rounds toward negative infinity:</p>
+                <pre><span class="k">&gt;&gt;&gt;</span> -5 &gt;&gt; 1
+<span class="n">-3</span>                  <span class="c"># floor(-2.5) = -3, not -2</span>
+<span class="k">&gt;&gt;&gt;</span> -1 &gt;&gt; 1
+<span class="n">-1</span>                  <span class="c"># and -1 never goes anywhere, however far you shift</span></pre>
+                <p>A negative number's bits are conceptually all ones to the left, so shifting right keeps
+                    feeding ones in. We explain that properly tomorrow.</p>
+            </div>
+
+            <h3>Two integer methods worth knowing</h3>
+
+            <h4><code>.bit_length()</code></h4>
+            <p>How many binary digits the number needs, ignoring leading zeros and ignoring the sign.</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> (255).bit_length()
+<span class="n">8</span>                  <span class="c"># 255 = 11111111 → eight digits</span></pre>
+            <p>The pattern is that it ticks up at each power of two:</p>
+            <div class="tw">
+                <table>
+                    <tr><th>n</th><th>binary</th><th>bit_length()</th></tr>
+                    <tr><td>0</td><td><code>0</code></td><td>0 &nbsp;<em>(special case)</em></td></tr>
+                    <tr><td>1</td><td><code>1</code></td><td>1</td></tr>
+                    <tr><td>2</td><td><code>10</code></td><td>2</td></tr>
+                    <tr><td>3</td><td><code>11</code></td><td>2</td></tr>
+                    <tr><td>4</td><td><code>100</code></td><td>3</td></tr>
+                    <tr><td>7</td><td><code>111</code></td><td>3</td></tr>
+                    <tr><td>8</td><td><code>1000</code></td><td>4</td></tr>
+                    <tr><td>255</td><td><code>11111111</code></td><td>8</td></tr>
+                    <tr><td>256</td><td><code>100000000</code></td><td>9</td></tr>
+                </table>
+            </div>
+            <p>Useful shortcut: <code>n.bit_length()</code> is <code>floor(log2(n)) + 1</code> for positive
+                <em>n</em>, but computed exactly, with no floating-point error. Prefer it over <code>math.log2</code>
+                whenever the answer must be exact.</p>
+
+            <h4><code>.bit_count()</code> &mdash; population count</h4>
+            <p>How many bits are set to <code>1</code>. Added in Python 3.10.</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> (255).bit_count()
+<span class="n">8</span>                  <span class="c"># 11111111 — eight ones</span>
+<span class="k">&gt;&gt;&gt;</span> (11).bit_count()
+<span class="n">3</span>                  <span class="c"># 1011 — three ones</span>
+<span class="k">&gt;&gt;&gt;</span> (16).bit_count()
+<span class="n">1</span>                  <span class="c"># 10000 — one one</span>
+<span class="k">&gt;&gt;&gt;</span> (10).bit_count()
+<span class="n">2</span>                  <span class="c"># 1010 — two ones</span></pre>
+            <p>The traditional name is <strong>popcount</strong>, and you will see that word everywhere. On older
+                Python, <code>bin(n).count('1')</code> does the same thing far more slowly.</p>
+
+            <h3>A real use: flags and permissions</h3>
+
+            <p>This is where bitwise operations actually earn their place in ordinary code. Give each independent
+                boolean its own bit:</p>
+            <pre>READ   = <span class="n">1</span>   <span class="c"># 001</span>
+WRITE  = <span class="n">2</span>   <span class="c"># 010</span>
+DELETE = <span class="n">4</span>   <span class="c"># 100</span></pre>
+            <p>Combine with OR:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> perms = READ | WRITE
+<span class="k">&gt;&gt;&gt;</span> perms
+<span class="n">3</span>
+<span class="k">&gt;&gt;&gt;</span> format(perms, <span class="s">'03b'</span>)
+<span class="s">'011'</span>
+
+    001   <span class="c">READ</span>
+ |  010   <span class="c">WRITE</span>
+ ──────
+    011   <span class="c">both, in one integer</span></pre>
+            <p>Test with AND:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> perms &amp; WRITE          <span class="c">#   011 &amp; 010 = 010</span>
+<span class="n">2</span>                       <span class="c"># non-zero → yes</span>
+<span class="k">&gt;&gt;&gt;</span> perms &amp; DELETE         <span class="c">#   011 &amp; 100 = 000</span>
+<span class="n">0</span>                       <span class="c"># zero → no</span>
+
+<span class="k">if</span> perms &amp; WRITE:        <span class="c"># the idiomatic test</span>
+    ...</pre>
+            <p>Revoke with AND-NOT, toggle with XOR:</p>
+            <pre><span class="k">&gt;&gt;&gt;</span> perms &amp; ~WRITE         <span class="c"># clear the WRITE bit</span>
+<span class="n">1</span>
+<span class="k">&gt;&gt;&gt;</span> perms ^ DELETE         <span class="c"># flip DELETE on (or off, if it were on)</span>
+<span class="n">7</span></pre>
+            <p>Three booleans in one integer, each test a single CPU instruction. This exact pattern is how Unix
+                file modes, TCP header flags, CPU status registers and most permission systems you have used are
+                built.</p>
+
+            <h3>The same operators in Rust</h3>
+
+            <p>Rust does the identical bit arithmetic, but forces one thing into the open that Python hides:
+                <strong>the width of the integer.</strong></p>
+            <pre><span class="k">let</span> a: <span class="k">u8</span>  = <span class="n">0b1011_1010</span>;   <span class="c">// unsigned, 8 bits</span>
+<span class="k">let</span> b: <span class="k">i32</span> = <span class="n">0xff</span>;         <span class="c">// signed, 32 bits</span></pre>
+            <p>Reading the type names: <code>u</code> is unsigned (zero and up), <code>i</code> is signed
+                (negatives allowed), and the number is how many bits.</p>
+            <div class="tw">
+                <table>
+                    <tr><th>Type</th><th>Bits</th><th>Bytes</th><th>Range</th></tr>
+                    <tr><td><code>u8</code></td><td>8</td><td>1</td><td>0 … 255</td></tr>
+                    <tr><td><code>u16</code></td><td>16</td><td>2</td><td>0 … 65,535</td></tr>
+                    <tr><td><code>u32</code></td><td>32</td><td>4</td><td>0 … 4,294,967,295</td></tr>
+                    <tr><td><code>u64</code></td><td>64</td><td>8</td><td>0 … 2<sup>64</sup>&minus;1</td></tr>
+                    <tr><td><code>i8</code></td><td>8</td><td>1</td><td>&minus;128 … 127</td></tr>
+                    <tr><td><code>i32</code></td><td>32</td><td>4</td><td>&minus;2<sup>31</sup> … 2<sup>31</sup>&minus;1</td></tr>
+                    <tr><td><code>i64</code></td><td>64</td><td>8</td><td>&minus;2<sup>63</sup> … 2<sup>63</sup>&minus;1</td></tr>
+                    <tr><td><code>usize</code></td><td>64 here</td><td>8</td><td>pointer-sized; used for indexes and lengths</td></tr>
+                </table>
+            </div>
+            <p>The underscore in <code>0b1011_1010</code> is purely cosmetic &mdash; Rust lets you put it anywhere
+                in a numeric literal to group digits. <code>0b1011_1010</code>, <code>0b10111010</code> and
+                <code>186</code> are the same value. Use it to group bits in fours and hex in bytes:</p>
+            <pre><span class="n">1_000_000</span>        <span class="n">0xff_ff</span>        <span class="n">0b1010_1010</span></pre>
+
+            <h4>Operator differences</h4>
+            <div class="tw">
+                <table>
+                    <tr><th>Operation</th><th>Python</th><th>Rust</th></tr>
+                    <tr><td>AND, OR, XOR</td><td><code>&amp;</code> <code>|</code> <code>^</code></td><td>same</td></tr>
+                    <tr><td>shifts</td><td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td><td>same</td></tr>
+                    <tr><td><strong>NOT</strong></td><td><code>~x</code></td><td><code>!x</code></td></tr>
+                    <tr><td>popcount</td><td><code>x.bit_count()</code></td><td><code>x.count_ones()</code></td></tr>
+                    <tr><td>leading zeros</td><td>&mdash;</td><td><code>x.leading_zeros()</code></td></tr>
+                    <tr><td>trailing zeros</td><td>&mdash;</td><td><code>x.trailing_zeros()</code></td></tr>
+                    <tr><td>rotate</td><td>&mdash;</td><td><code>x.rotate_left(k)</code></td></tr>
+                    <tr><td>bytes of a value</td><td><code>struct.pack</code></td><td><code>x.to_le_bytes()</code></td></tr>
+                </table>
+            </div>
+            <p>Note that <code>!</code> in Rust is both logical not (on <code>bool</code>) and bitwise not (on
+                integers) &mdash; the type decides which. Python needs two symbols, <code>not</code> and
+                <code>~</code>, because an integer is also truthy.</p>
+
+            <h4>The methods Python does not have</h4>
+            <p>Because Rust knows the width, it can answer questions Python cannot. Using
+                <code>a: u8 = 0b1011_1010</code> throughout:</p>
+            <pre><span class="c">// 1 0 1 1 1 0 1 0   ← always exactly 8 bits, because u8</span>
+
+a.count_ones()        <span class="c">// 5  — five bits are set</span>
+a.count_zeros()       <span class="c">// 3</span>
+a.leading_zeros()     <span class="c">// 0  — the top bit is already 1</span>
+a.trailing_zeros()    <span class="c">// 1  — one zero at the bottom end</span></pre>
+            <p>Change the value and the width still anchors the answer:</p>
+            <pre><span class="k">let</span> x: <span class="k">u8</span> = <span class="n">0b0001_1010</span>;
+<span class="c">//          ^^^ three leading zeros</span>
+x.leading_zeros()     <span class="c">// 3</span>
+
+<span class="k">let</span> y: <span class="k">u8</span> = <span class="n">0b1011_1000</span>;
+<span class="c">//                ^^^ three trailing zeros</span>
+y.trailing_zeros()    <span class="c">// 3</span></pre>
+            <p><code>leading_zeros</code> is impossible in Python because an integer has no declared width &mdash;
+                there is no agreed number of leading zeros to count. That is the whole difference between the two
+                languages in one method.</p>
+
+            <h4>Rotate versus shift</h4>
+            <p>A shift throws bits away. A <strong>rotation</strong> wraps them around to the other end.</p>
+            <pre>a = <span class="n">1011_1010</span>
+
+a &lt;&lt; 3          <span class="c">// SHIFT: 101 falls off the left and is lost</span>
+  <span class="n">1101_0000</span>     <span class="c">// = 208</span>
+
+a.rotate_left(3)  <span class="c">// ROTATE: 101 comes back around on the right</span>
+  <span class="n">1101_0101</span>     <span class="c">// = 213</span></pre>
+            <p>Step through the rotation one place at a time if it helps:</p>
+            <pre>  <span class="n">1011_1010</span>   <span class="c">start</span>
+  <span class="n">0111_0101</span>   <span class="c">rotate 1 — the leading 1 reappears at the end</span>
+  <span class="n">1110_1010</span>   <span class="c">rotate 2</span>
+  <span class="n">1101_0101</span>   <span class="c">rotate 3 ✓</span></pre>
+            <p>Rotation only makes sense when the width is known, which is why Python has no built-in for it.
+                It matters because cryptography, hashing and checksums are built almost entirely out of rotations
+                and XOR &mdash; no bit is ever allowed to be lost, because the operation has to be
+                reversible.</p>
+
+            <h4>Width is a real constraint</h4>
+            <pre><span class="n">1u64</span> &lt;&lt; <span class="n">63</span>     <span class="c">// fine — lands on the top bit of 64</span>
+<span class="n">1u32</span> &lt;&lt; <span class="n">31</span>     <span class="c">// fine — lands on the top bit of 32</span>
+<span class="n">1u32</span> &lt;&lt; <span class="n">32</span>     <span class="c">// PANIC in debug: shift amount ≥ width</span>
+<span class="n">1u32</span> &lt;&lt; <span class="n">63</span>     <span class="c">// PANIC — meaningless in a 32-bit value</span></pre>
+            <p>In Python, <code>1 &lt;&lt; 63</code> and <code>1 &lt;&lt; 6300</code> both just work, because the integer
+                grows to fit. In C the same shift is undefined behaviour, which is worse than a panic: the
+                compiler is entitled to assume it never happens and optimise accordingly. Rust's choice to panic
+                loudly in debug and wrap predictably in release is the deliberate middle path.</p>
+
+            <!-- ============ ALTITUDE 2 ============ -->
+            <div class="alt-head alt-2" id="a2">
+                <span class="badge">Altitude 2</span>
+                <h2>Semantics</h2>
+            </div>
+
+            <p>You now have the operators. This section is the vocabulary built from them &mdash; the handful of
+                expressions that appear in real bit-manipulation code, and why each one works rather than just
+                that it does.</p>
+
+            <h3>The idiom table</h3>
+            <p>Learn these as phrases, not puzzles. <em>i</em> counts from 0 at the rightmost bit.</p>
+            <div class="tw">
+                <table>
+                    <tr><th>Goal</th><th>Expression</th><th>Mechanism</th></tr>
+                    <tr><td>read bit <em>i</em></td><td><code>n &gt;&gt; i &amp; 1</code></td><td>slide it to position 0, mask off everything above</td></tr>
+                    <tr><td>set bit <em>i</em></td><td><code>n | (1 &lt;&lt; i)</code></td><td>OR with a single-bit mask; OR never clears</td></tr>
+                    <tr><td>clear bit <em>i</em></td><td><code>n &amp; ~(1 &lt;&lt; i)</code></td><td>AND with that mask inverted</td></tr>
+                    <tr><td>flip bit <em>i</em></td><td><code>n ^ (1 &lt;&lt; i)</code></td><td>XOR inverts exactly where the mask is 1</td></tr>
+                    <tr><td>lowest set bit, isolated</td><td><code>n &amp; -n</code></td><td>see below</td></tr>
+                    <tr><td>clear lowest set bit</td><td><code>n &amp; (n - 1)</code></td><td>see below</td></tr>
+                    <tr><td>is a power of two</td><td><code>n &gt; 0 and n &amp; (n-1) == 0</code></td><td>exactly one bit set</td></tr>
+                    <tr><td>low <em>k</em> bits only</td><td><code>n &amp; ((1 &lt;&lt; k) - 1)</code></td><td><code>(1&lt;&lt;k)-1</code> is <em>k</em> ones</td></tr>
+                    <tr><td>count set bits</td><td><code>n.bit_count()</code></td><td>or Kernighan's loop, below</td></tr>
+                </table>
+            </div>
+
+            <p>That <code>(1 &lt;&lt; k) - 1</code> trick is worth its own moment, because it recurs constantly.
+                Subtracting one from a lone bit borrows all the way down and fills everything beneath it:</p>
+            <pre>1 &lt;&lt; 4       = <span class="n">0001_0000</span>  = 16
+(1 &lt;&lt; 4) - 1 = <span class="n">0000_1111</span>  = 15     <span class="c">← exactly four ones</span></pre>
+
+            <h3>Why <code>n &amp; (n - 1)</code> clears the lowest set bit</h3>
+            <p>Subtracting one flips the lowest <code>1</code> to <code>0</code> and turns every zero below it into
+                a one. AND that against the original and the lower region cancels completely:</p>
+            <div class="ex">
+                <div class="exn">Worked &mdash; n = 44</div>
+                <pre>n      = <span class="n">0010_1100</span>   <span class="c">(44)</span>
+n - 1  = <span class="n">0010_1011</span>   <span class="c">(43)  — lowest 1 cleared, zeros below became ones</span>
+         ─────────
+n&amp;(n-1)= <span class="n">0010_1000</span>   <span class="c">(40)  — the lowest set bit is gone, rest untouched</span></pre>
+            </div>
+            <p>Repeat until zero and you have counted the set bits, visiting each exactly once. This is
+                <strong>Brian Kernighan's algorithm</strong>:</p>
+            <pre><span class="k">def</span> popcount(n):
+    count = <span class="n">0</span>
+    <span class="k">while</span> n:
+        n &amp;= n - <span class="n">1</span>      <span class="c"># remove the lowest set bit</span>
+        count += <span class="n">1</span>
+    <span class="k">return</span> count</pre>
+            <p>The loop runs once per set bit, not once per bit position &mdash; which for a sparse value is the
+                difference between one iteration and sixty-four.</p>
+
+            <h3>Why <code>n &amp; -n</code> isolates the lowest set bit</h3>
+            <p>This looks like nonsense until you know what negation does to the bits. Negating in two's
+                complement means <strong>invert every bit, then add one</strong> (tomorrow's topic, taken on faith
+                today):</p>
+            <div class="ex">
+                <div class="exn">Worked &mdash; n = 40</div>
+                <pre>n        = <span class="n">0010_1000</span>
+invert   = <span class="n">1101_0111</span>
+add 1    = <span class="n">1101_1000</span>   <span class="c">= -n</span>
+
+n        = <span class="n">0010_1000</span>
+-n       = <span class="n">1101_1000</span>
+           ─────────
+n &amp; -n   = <span class="n">0000_1000</span>   <span class="c">← the lowest set bit, alone</span></pre>
+            </div>
+            <p>The reason it works is the carry. Adding one after inverting propagates upward through the trailing
+                ones of the inverted value &mdash; which were the trailing <em>zeros</em> of the original &mdash;
+                and stops at the first position that had a <code>1</code>. The result:</p>
+            <ul>
+                <li><strong>Below</strong> the lowest set bit: original is all zeros, so the AND is zero.</li>
+                <li><strong>At</strong> the lowest set bit: both are <code>1</code>, so it survives.</li>
+                <li><strong>Above</strong> it: the carry stopped, so those bits are the plain inversion of the
+                    original &mdash; every column has one <code>1</code> and one <code>0</code>, and the AND kills
+                    them all.</li>
+            </ul>
+            <p>It works in Python too, despite Python having no fixed width, because Python integers behave as
+                though two's complement extends infinitely to the left. This expression is the foundation of the
+                Fenwick tree you will meet on day 33.</p>
+
+            <h3>XOR is the operator with algebra</h3>
+            <p>Four properties. Every XOR trick in existence is a consequence of them:</p>
+            <div class="tw">
+                <table>
+                    <tr><th>Property</th><th>Meaning</th></tr>
+                    <tr><td><code>x ^ x == 0</code></td><td>self-inverse &mdash; anything XORed with itself vanishes</td></tr>
+                    <tr><td><code>x ^ 0 == x</code></td><td>zero is the identity</td></tr>
+                    <tr><td><code>x ^ y == y ^ x</code></td><td>commutative</td></tr>
+                    <tr><td><code>(x^y)^z == x^(y^z)</code></td><td>associative</td></tr>
+                </table>
+            </div>
+            <p>Commutativity and associativity together mean <strong>order does not matter at all.</strong> So if
+                you XOR an entire array in which every value appears twice except one, the pairs annihilate each
+                other no matter how far apart they sit, and what remains is the unpaired value:</p>
+            <div class="ex">
+                <div class="exn">Worked &mdash; find the unpaired element</div>
+                <pre>[4, 1, 2, 1, 2]
+
+4 ^ 1 ^ 2 ^ 1 ^ 2
+= 4 ^ (1 ^ 1) ^ (2 ^ 2)    <span class="c">← reorder freely</span>
+= 4 ^ 0 ^ 0
+= <span class="hl">4</span></pre>
+                <pre><span class="k">from</span> functools <span class="k">import</span> reduce
+<span class="k">from</span> operator <span class="k">import</span> xor
+reduce(xor, [<span class="n">4</span>,<span class="n">1</span>,<span class="n">2</span>,<span class="n">1</span>,<span class="n">2</span>])     <span class="c"># 4 — O(n) time, O(1) space</span></pre>
+            </div>
+            <p>Two more consequences you will use today:</p>
+            <ul>
+                <li><strong>XOR is its own undo.</strong> <code>a ^ k ^ k == a</code>. This is why the simplest
+                    (and weakest) ciphers are XOR with a key.</li>
+                <li><strong>If <code>a ^ b == t</code> then <code>a ^ t == b</code>.</strong> Rearranging works
+                    exactly like ordinary algebra. Problem&nbsp;2 is built entirely on this.</li>
+            </ul>
+
+            <h3>An integer as a set</h3>
+            <p>Once bit <em>i</em> means "element <em>i</em> is present", a single integer is a whole set and the
+                set operations become single instructions:</p>
+            <pre>s = <span class="n">0</span>                      <span class="c"># empty set</span>
+s |= <span class="n">1</span> &lt;&lt; <span class="n">3</span>                <span class="c"># add element 3</span>
+s |= <span class="n">1</span> &lt;&lt; <span class="n">5</span>                <span class="c"># add element 5</span>
+<span class="k">if</span> s &gt;&gt; <span class="n">3</span> &amp; <span class="n">1</span>: ...           <span class="c"># membership</span>
+s &amp;= ~(<span class="n">1</span> &lt;&lt; <span class="n">3</span>)             <span class="c"># remove element 3</span>
+
+a | b                     <span class="c"># union</span>
+a &amp; b                     <span class="c"># intersection</span>
+a &amp; ~b                    <span class="c"># difference</span>
+a ^ b                     <span class="c"># symmetric difference</span>
+a &amp; b == a                <span class="c"># a is a subset of b</span>
+s.bit_count()             <span class="c"># size</span></pre>
+            <p>This is why competitive code is full of bitmasks, and it is what makes subset dynamic programming
+                tractable at all &mdash; day 22.</p>
+
+            <h4>Enumerating every subset of a mask</h4>
+            <p>One genuinely non-obvious idiom, included because it has a complexity result attached:</p>
+            <pre>sub = mask
+<span class="k">while</span> sub:
+    process(sub)
+    sub = (sub - <span class="n">1</span>) &amp; mask    <span class="c"># next smaller submask</span>
+<span class="c"># the loop exits on 0, so handle the empty submask separately if you need it</span></pre>
+            <p>Subtracting one borrows through the mask's own bits; ANDing back with the mask discards whatever
+                borrowed outside it. The effect is a clean descending walk through every subset.</p>
+
+            <!-- ============ ALTITUDE 3 ============ -->
+            <div class="alt-head alt-3" id="a3">
+                <span class="badge">Altitude 3</span>
+                <h2>Machine</h2>
+            </div>
+
+            <h3>The byte is the unit of address</h3>
+            <p>A <strong>byte</strong> is eight bits and it is the smallest thing in a computer with its own
+                address. Memory is a numbered sequence of bytes; addresses count bytes, never bits.</p>
+            <div class="note key">
+                <span class="lbl">The consequence</span>
+                <p><strong>There is no address for a bit.</strong> You cannot hand the CPU the location of a single
+                    bit and ask it to flip that. To change one bit, the processor must load the whole byte or word
+                    containing it, apply a mask, and store the result back.</p>
+                <p>That is the real reason the idiom table above exists. Those expressions are not clever tricks
+                    layered on top of a bit-addressable machine &mdash; they are the <em>only</em> mechanism
+                    available. Bitfields in C and Rust look like named fields but compile into exactly this
+                    load&ndash;mask&ndash;store sequence.</p>
+            </div>
+            <p>A <strong>word</strong> is the processor's natural working width &mdash; 64 bits on Apple
+                silicon. Its general-purpose registers are <code>x0</code> through <code>x30</code>, each 64 bits,
+                and <code>w0</code>&ndash;<code>w30</code> name the lower 32 bits of those same registers rather
+                than separate storage.</p>
+            <p>The units, since they get used loosely: 4 bits is a <strong>nibble</strong> (one hex digit), 8 is a
+                byte, and "half word", "word" and "double word" mean different sizes depending on whose manual you
+                are reading &mdash; always check.</p>
+
+            <h3>Endianness &mdash; byte order within a value</h3>
+            <p>A 32-bit value occupies four consecutive bytes. Which end goes first is a genuine design choice,
+                and both answers are in use. Store <code>0x12345678</code> starting at address 1000:</p>
+            <pre>  <span class="c">little-endian  (Apple silicon, x86)      big-endian  (network order)</span>
+
+  1000:  <span class="n">78</span>   <span class="c">← least significant</span>        1000:  <span class="n">12</span>   <span class="c">← most significant</span>
+  1001:  <span class="n">56</span>                              1001:  <span class="n">34</span>
+  1002:  <span class="n">34</span>                              1002:  <span class="n">56</span>
+  1003:  <span class="n">12</span>                              1003:  <span class="n">78</span></pre>
+            <p><strong>Little-endian</strong> puts the least significant byte at the lowest address. It reads
+                backwards to a human, but it has a concrete advantage: the low byte of a value sits at the
+                <em>same address</em> as the value itself, so narrowing a 64-bit integer to 8 bits is free &mdash;
+                you read fewer bytes from the identical pointer, with no offset arithmetic.</p>
+            <p><strong>Big-endian</strong> matches how we write numbers and became the convention for network
+                protocols &mdash; which is why it is called <em>network byte order</em>, and why
+                <code>htons</code>/<code>htonl</code> exist in every socket library. Any time bytes cross between
+                machines or go into a file format, somebody has to commit to an order.</p>
+            <p>Python makes you state it explicitly, which is the right default:</p>
+            <pre><span class="k">import</span> struct
+
+struct.pack(<span class="s">'&lt;I'</span>, <span class="n">0x12345678</span>).hex(<span class="s">' '</span>)   <span class="c"># '78 56 34 12'  little</span>
+struct.pack(<span class="s">'&gt;I'</span>, <span class="n">0x12345678</span>).hex(<span class="s">' '</span>)   <span class="c"># '12 34 56 78'  big</span>
+
+(<span class="n">0x12345678</span>).to_bytes(<span class="n">4</span>, <span class="s">'little'</span>)          <span class="c"># same thing, no struct</span></pre>
+            <p>Rust the same, by method name &mdash; and <code>to_ne_bytes</code> for whatever the host
+                uses:</p>
+            <pre><span class="n">0x1234u16</span>.to_le_bytes()   <span class="c">// [0x34, 0x12]</span>
+<span class="n">0x1234u16</span>.to_be_bytes()   <span class="c">// [0x12, 0x34]</span>
+<span class="n">0x1234u16</span>.to_ne_bytes()   <span class="c">// native — [0x34, 0x12] on Apple silicon</span></pre>
+            <div class="note trap">
+                <span class="lbl">Where this bites in real work</span>
+                <p>Endianness is invisible until bytes leave your process. Then it is suddenly everything: binary
+                    file formats, network packets, memory-mapped hardware registers, hashes, checksums, and any
+                    C interop. A struct written to disk on one architecture and read on another, with no explicit
+                    byte order, is a bug that will wait years to surface.</p>
+            </div>
+
+            <h3>What your processor actually executes</h3>
+            <p>Every operator in altitude 1 is a single ARM64 instruction:</p>
+            <pre>  and   x0, x1, x2      <span class="c">// x0 = x1 &amp; x2</span>
+  orr   x0, x1, x2      <span class="c">// x0 = x1 | x2</span>
+  eor   x0, x1, x2      <span class="c">// x0 = x1 ^ x2   ("exclusive or", not "xor")</span>
+  mvn   x0, x1          <span class="c">// x0 = ~x1       ("move not")</span>
+  lsl   x0, x1, #3      <span class="c">// logical shift left</span>
+  lsr   x0, x1, #3      <span class="c">// logical shift right  — fills with zeros</span>
+  asr   x0, x1, #3      <span class="c">// arithmetic shift right — copies the sign bit</span>
+  clz   x0, x1          <span class="c">// count leading zeros</span>
+  rbit  x0, x1          <span class="c">// reverse all 64 bits</span></pre>
+            <p>Note that <code>lsr</code> and <code>asr</code> are different instructions. That is the hardware
+                reason Python's <code>&gt;&gt;</code> behaves differently on negative numbers &mdash; signed values
+                need the sign bit replicated, unsigned ones need zeros, and the compiler picks the instruction from
+                the type.</p>
+            <p>All of these are single-cycle ALU operations, and the core is wide enough to retire several per
+                cycle. This is as cheap as computation gets on real hardware.</p>
+            <div class="note">
+                <span class="lbl">One asymmetry worth knowing</span>
+                <p>ARM64 has no <em>scalar</em> population count. The <code>cnt</code> instruction lives in the
+                    NEON vector unit, so counting bits in a plain register means moving the value into a vector
+                    register, running <code>cnt</code> per byte-lane, then <code>addv</code> to sum the lanes
+                    &mdash; three instructions and a register-file crossing where x86 has one
+                    <code>popcnt</code>.</p>
+                <p>It does not change any complexity claim, but it is exactly the kind of constant factor that
+                    decides a tight loop, and you will see it in the generated assembly yourself on day 42.</p>
+            </div>
+
+            <!-- ============ ALTITUDE 4 ============ -->
+            <div class="alt-head alt-4" id="a4">
+                <span class="badge">Altitude 4</span>
+                <h2>Cost</h2>
+            </div>
+
+            <p>Every day in this course ends here: time, space, and where the thing is the wrong choice.</p>
+
+            <h3>On the hardware: as cheap as it gets</h3>
+            <p>A bitwise operation on a machine word is <strong>O(1)</strong> &mdash; one ALU instruction, roughly
+                one cycle, several able to issue in the same cycle. There is no faster category of
+                computation.</p>
+
+            <h3>In CPython it is not O(1)</h3>
+            <p>This is the most important cost lesson of the day, and it catches people who have only ever
+                reasoned about bit operations in C.</p>
+            <p>A Python <code>int</code> is arbitrary precision. CPython stores it as an <strong>array of 30-bit
+                digits</strong>, so an operation on a big integer is a loop over that array:</p>
+            <div class="tw">
+                <table>
+                    <tr><th>Operation</th><th>Complexity</th><th>Note</th></tr>
+                    <tr><td><code>a &amp; b</code>, <code>a | b</code>, <code>a ^ b</code></td><td>O(max(digits))</td><td>= O(<em>n</em>/30) for an <em>n</em>-bit value</td></tr>
+                    <tr><td><code>n &lt;&lt; k</code></td><td>O(<em>n</em> + <em>k</em>)</td><td>allocates a larger integer; genuinely not free</td></tr>
+                    <tr><td><code>n &gt;&gt; k</code></td><td>O(<em>n</em>)</td><td>allocates a new, smaller integer</td></tr>
+                    <tr><td><code>n.bit_count()</code></td><td>O(digits)</td><td></td></tr>
+                </table>
+            </div>
+            <p>For values below 2<sup>30</sup> that is one digit, so effectively constant &mdash; but with roughly
+                <strong>30&ndash;50 nanoseconds</strong> of interpreter overhead per operation against something
+                closer to a third of a nanosecond in Rust. A hundredfold constant factor that Big-O cannot see,
+                and the reason day 41 exists.</p>
+            <p>And <code>1 &lt;&lt; 10000</code> is not a shift at all in any hardware sense &mdash; it is an
+                allocation of a 334-digit integer.</p>
+
+            <h3>Kernighan versus the naive loop</h3>
+            <div class="tw">
+                <table>
+                    <tr><th>Approach</th><th>Iterations</th><th>For <code>0b1000_0000</code> (one bit set in 64)</th></tr>
+                    <tr><td>shift and test every position</td><td>O(bit_length)</td><td>64</td></tr>
+                    <tr><td><code>n &amp;= n - 1</code></td><td>O(popcount)</td><td>1</td></tr>
+                </table>
+            </div>
+            <p>Same complexity class in the worst case, sixty-four times apart in the case that actually occurs in
+                sparse bitmask code.</p>
+
+            <h3>An integer as a set, costed</h3>
+            <p>For up to 64 elements, the comparison against a hash set is lopsided:</p>
+            <div class="tw">
+                <table>
+                    <tr><th>Operation</th><th><code>set</code></th><th>bitmask</th></tr>
+                    <tr><td>membership</td><td>O(1) &mdash; plus a hash, a probe, a pointer dereference</td><td>one AND</td></tr>
+                    <tr><td>union / intersection</td><td>O(<em>n</em>)</td><td>one OR / one AND</td></tr>
+                    <tr><td>size</td><td>O(1), stored</td><td>one popcount</td></tr>
+                    <tr><td>iterate elements</td><td>O(<em>n</em>)</td><td>O(popcount) via <code>n &amp; -n</code></td></tr>
+                    <tr><td>memory</td><td>~54 bytes <em>per element</em></td><td>8 bytes <em>total</em></td></tr>
+                    <tr><td>cache behaviour</td><td>scattered heap allocations</td><td>one register</td></tr>
+                </table>
+            </div>
+
+            <h3>One complexity result that surprises people</h3>
+            <p>Enumerating every submask of every mask over <em>n</em> elements is
+                <strong>O(3<sup>n</sup>)</strong>, not O(4<sup>n</sup>) as the nested loop suggests.</p>
+            <p>The proof is a counting argument. For each of the <em>n</em> bits there are exactly three
+                possibilities across the pair (mask, submask): in both, in the mask only, or in neither. It cannot
+                be in the submask without being in the mask. Three independent choices per bit, <em>n</em> bits,
+                so 3<sup>n</sup> pairs total.</p>
+
+            <h3>When bitmasks are the wrong answer</h3>
+            <ul>
+                <li><strong>More than word-many elements.</strong> Past 64 you need a real bitset
+                    (<code>bytearray</code>, <code>int</code> with explicit indexing, or a library), and the clean
+                    single-register story is gone.</li>
+                <li><strong>Sparse universes.</strong> Three values drawn from a billion possibilities is a
+                    <code>set</code>, not a mask.</li>
+                <li><strong>Anywhere a future reader has to decode it.</strong> Clever bit-packing in application
+                    code that nobody can read is a maintenance liability, not an optimisation. The flags example
+                    earlier works because <code>READ</code>, <code>WRITE</code> and <code>DELETE</code> are
+                    <em>named</em>.</li>
+                <li><strong>Before measuring.</strong> If the bit-twiddling is not in a hot path, the clearer code
+                    wins by default.</li>
+            </ul>
+
+            <hr>
+
+            <!-- ============ PRACTICE ============ -->
+            <h2 id="practice">Practice questions</h2>
+            <p>Worth answering before revealing. No interpreter &mdash; the point is reading bits in your
+                head.</p>
+
+            <details class="q">
+                <summary><span class="qn">01</span> Write <code>0xCAFE</code> in binary. How many bytes does it occupy?</summary>
+                <div class="qa">
+                    <p>Translate each hex digit to its four bits independently:</p>
+                    <pre>C    A    F    E
+1100 1010 1111 1110</pre>
+                    <p>Four hex digits &times; 4 bits = <strong>16 bits = 2 bytes.</strong> This is the payoff of
+                        the nibble alignment &mdash; no arithmetic was needed, just four table lookups.</p>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">02</span> What is <code>~0</code> in Python? And <code>!0u8</code> in Rust? Why do they differ?</summary>
+                <div class="qa">
+                    <p><code>~0</code> is <strong>&minus;1</strong>. <code>!0u8</code> is <strong>255</strong>.</p>
+                    <p>Both invert every bit. The difference is how many bits there are. Rust's <code>u8</code> has
+                        exactly eight, so the result is <code>11111111</code> read as unsigned = 255. Python has no
+                        width &mdash; the number conceptually extends left forever, so inverting zero produces
+                        infinitely many ones, which in two's complement is &minus;1.</p>
+                    <p>Same operation, same bits, different frame. Consistent with <code>~n == -(n+1)</code>.</p>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">03</span> What does <code>n &amp; (n - 1) == 0</code> test, and which input does it get wrong?</summary>
+                <div class="qa">
+                    <p>It tests whether <em>n</em> is a <strong>power of two</strong> &mdash; a value with exactly
+                        one bit set, which the subtract-and-AND clears to nothing.</p>
+                    <p>It gets <strong>zero</strong> wrong. <code>0 &amp; -1 == 0</code>, so zero passes the test
+                        despite having no bits set at all. Hence the guard:</p>
+                    <pre>n &gt; <span class="n">0</span> <span class="k">and</span> n &amp; (n - <span class="n">1</span>) == <span class="n">0</span></pre>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">04</span> Explain the carry in <code>n &amp; -n</code>.</summary>
+                <div class="qa">
+                    <p>Negation inverts then adds one. The add-one carries upward through the inverted value's
+                        trailing ones &mdash; which were the original's trailing <em>zeros</em> &mdash; and halts at
+                        the first position the original had set.</p>
+                    <p>Below that position: the original is zero, so the AND is zero. At it: both are one, so it
+                        survives. Above it: the carry stopped, so those bits are the plain inversion of the
+                        original, meaning every column holds one <code>1</code> and one <code>0</code> and the AND
+                        clears them. Only the lowest set bit remains.</p>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">05</span> <code>0x0000FF00</code> is stored at address 2000 on Apple silicon. Which byte is at 2000?</summary>
+                <div class="qa">
+                    <p><strong><code>0x00</code>.</strong></p>
+                    <p>The four bytes of the value, most to least significant, are <code>00 00 FF 00</code>. Apple
+                        silicon is little-endian, so the <em>least</em> significant byte goes to the lowest
+                        address:</p>
+                    <pre>2000: <span class="n">00</span>   <span class="c">← least significant</span>
+2001: <span class="n">FF</span>
+2002: <span class="n">00</span>
+2003: <span class="n">00</span></pre>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">06</span> Every element appears twice except one. How does a single XOR pass find it, and why does order not matter?</summary>
+                <div class="qa">
+                    <p>XOR the whole array. Because <code>x ^ x == 0</code>, every pair annihilates; because
+                        <code>x ^ 0 == x</code>, the survivor passes through unchanged.</p>
+                    <p>Order is irrelevant because XOR is commutative <em>and</em> associative, so the terms can be
+                        regrouped freely &mdash; the two members of a pair need not be adjacent. O(<em>n</em>) time,
+                        O(1) space, no hash map.</p>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">07</span> What is the time complexity of <code>a &amp; b</code> in Python for two 1000-bit integers?</summary>
+                <div class="qa">
+                    <p><strong>O(<em>n</em>) in the bit length</strong> &mdash; concretely O(digits), where CPython
+                        uses 30-bit digits. A 1000-bit integer is <code>ceil(1000/30) = 34</code> digits, so the
+                        AND is a 34-iteration loop, not a single instruction.</p>
+                    <p>The trap is assuming C semantics. In C this would be one instruction regardless; in Python
+                        it scales with magnitude.</p>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">08</span> Why is <code>-1 &gt;&gt; 1</code> equal to <code>-1</code> rather than a large positive number?</summary>
+                <div class="qa">
+                    <p>Because <code>&gt;&gt;</code> on a signed value is an <em>arithmetic</em> shift &mdash; it
+                        replicates the sign bit rather than feeding in zeros. &minus;1 is conceptually all ones, so
+                        shifting right pulls in another one and leaves all ones: still &minus;1.</p>
+                    <p>It is also consistent with the floor-division definition: <code>-1 // 2</code> is
+                        <code>-1</code>, because floor(&minus;0.5) is &minus;1. Python's right shift and its floor
+                        division agree on negatives, which is deliberate.</p>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">09</span> How many iterations does <code>while n: n &amp;= n-1</code> run for <code>n = 0b10010000</code>?</summary>
+                <div class="qa">
+                    <p><strong>Two.</strong> The loop runs once per set bit, and <code>10010000</code> has two.</p>
+                    <pre><span class="n">1001_0000</span>  →  <span class="n">1000_0000</span>  →  <span class="n">0000_0000</span></pre>
+                    <p>A naive shift-and-test loop would have run eight times for the same value &mdash; or
+                        sixty-four, in a 64-bit register.</p>
+                </div>
+            </details>
+
+            <details class="q">
+                <summary><span class="qn">10</span> Forty boolean flags, queried in a hot loop. Bitmask or <code>set</code>?</summary>
+                <div class="qa">
+                    <p><strong>Bitmask.</strong> Forty fits inside one 64-bit word, so the entire structure is a
+                        single integer: 8 bytes rather than roughly 2 KB, one register rather than scattered heap
+                        allocations, and each query is an AND with no hashing and no pointer chase.</p>
+                    <p>The one caveat is readability &mdash; name the bit positions as constants rather than
+                        writing literal shifts at the call site.</p>
+                </div>
+            </details>
+
+            <hr>
+
+            <!-- ============ PROBLEMS ============ -->
+            <h2 id="problems">Coding problems</h2>
+            <p>Both are pure bit manipulation and both rest on the XOR algebra above. Complexity stated before
+                code, every time.</p>
+
+            <div class="prob">
+                <div class="ph">
+                    <h3>1 &middot; Two unpaired numbers</h3>
+                    <span class="tag">medium</span>
+                    <span class="tag">O(n) time, O(1) space</span>
+                </div>
+                <p>Every element of an array appears exactly twice, except <strong>two</strong> elements which
+                    appear once. Return those two, in any order.</p>
+                <pre>[<span class="n">1</span>,<span class="n">2</span>,<span class="n">1</span>,<span class="n">3</span>,<span class="n">2</span>,<span class="n">5</span>]  →  [<span class="n">3</span>,<span class="n">5</span>]</pre>
+                <p>No hash map and no sorting &mdash; constant extra space.</p>
+                <p><em>Direction:</em> one XOR pass over everything gives <code>a ^ b</code>, which is neither
+                    answer on its own. But every bit set in that result is a position where <em>a</em> and
+                    <em>b</em> disagree. Pick any one such bit and it partitions the entire array into two groups,
+                    each containing exactly one of the two answers &mdash; and every duplicate pair stays together
+                    in whichever group it lands. The idiom table has the tool for picking that bit cheaply.</p>
+            </div>
+
+            <div class="prob">
+                <div class="ph">
+                    <h3>2 &middot; Maximum XOR of two numbers in an array</h3>
+                    <span class="tag">hard</span>
+                    <span class="tag">target O(32n)</span>
+                </div>
+                <p>Given an array, find the maximum value of <code>nums[i] ^ nums[j]</code> over all pairs.</p>
+                <pre>[<span class="n">3</span>,<span class="n">10</span>,<span class="n">5</span>,<span class="n">25</span>,<span class="n">2</span>,<span class="n">8</span>]  →  <span class="n">28</span>     <span class="c"># 5 ^ 25</span></pre>
+                <p>The O(n&sup2;) double loop is correct and too slow.</p>
+                <p><em>Direction:</em> build the answer greedily from the most significant bit downward. At each
+                    bit, assume optimistically that you can make it a <code>1</code>, then test whether any pair of
+                    prefixes confirms that guess &mdash; using the rearrangement
+                    <code>a ^ b == t &nbsp;⟹&nbsp; a ^ t == b</code>. A set of the prefixes seen so far does the
+                    confirming in constant time per element.</p>
+            </div>
+
+            <div class="pending-sol">
+                <span class="ico">Solutions</span>
+                Published once I have solved them properly, with the complexity derivation and the reasoning that
+                got there &mdash; not before.
+            </div>
+
+            <p style="margin-top:2rem;color:var(--muted-2);font-size:.9rem">Worked solutions land in
+                <a href="https://github.com/Jeevan-Rai/god-of-code">github.com/Jeevan-Rai/god-of-code</a>
+                alongside the benchmarks and assembly dumps for each day.</p>
+        </article>
+
+        <nav class="pager">
+            <span>&larr; Day 00 &middot; nothing before this</span>
+            <span>Day 02 &middot; Integers &amp; two's complement &rarr;</span>
+        </nav>
+    </main>
+
+    <footer class="site-footer">
+        &copy; 2026 Jeevan P Rai &middot; Powered by Kronos-Nexus Infrastructure
+    </footer>
+
+    <script>
+        (function () {
+            var bar = document.getElementById('progress');
+            function tick() {
+                var h = document.documentElement;
+                var max = h.scrollHeight - h.clientHeight;
+                bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+            }
+            addEventListener('scroll', tick, { passive: true });
+            addEventListener('resize', tick);
+            tick();
+        })();
+    </script>
+</body>
+
+</html>

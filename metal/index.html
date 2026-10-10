@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>To the Metal — Jeevan P Rai | Systems notes from bits to ARM64</title>
+    <meta name="description"
+        content="A fifty-day systems programming course written in the open. Every topic taught at four levels: syntax, semantics, machine representation, and cost. Python and Rust on Apple silicon.">
+    <meta name="author" content="Jeevan P Rai">
+    <link rel="canonical" href="https://portfolio.kronos-nexus.com/metal/">
+    <meta property="og:title" content="To the Metal — systems notes from bits to ARM64">
+    <meta property="og:description"
+        content="Fifty days of systems programming, written in the open. Syntax, semantics, machine, cost — every topic, all four levels.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://portfolio.kronos-nexus.com/metal/">
+    <meta name="robots" content="index, follow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="metal.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="nav">
+            <a href="/#top" class="brand"><span class="dot"></span>jeevan-rai<span class="sub">.systems</span></a>
+            <a href="/" class="nav-back">&larr; back to portfolio</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="eyebrow">To the Metal</div>
+            <h1>Fifty days from a bit to the bare machine</h1>
+            <p class="lede">I build systems for a living, and for years I worked one layer above the machine &mdash;
+                fluent in the APIs, vague on what ran underneath. This is me closing that gap in public.
+                <strong>Every topic is taught at four levels: how you write it, what it means, what the bytes
+                actually do, and what it costs.</strong></p>
+            <div class="stats">
+                <div><b>50</b>days</div>
+                <div><b>4</b>levels each</div>
+                <div><b>100</b>problems</div>
+                <div><b>2</b>languages</div>
+            </div>
+        </section>
+
+        <section class="phase">
+            <div class="note">
+                <span class="lbl">How to read this</span>
+                <p>Each day stands alone and assumes nothing. If a page mentions a method you have not met, that
+                    page explains it &mdash; including the parts most references call obvious. Python is the primary
+                    language, Rust is the one that makes memory explicit, and ARM64 assembly appears for reading
+                    rather than writing. Hardware throughout is Apple silicon.</p>
+                <p>Practice questions sit at the end of every day with their answers revealable in place. Solutions
+                    to the coding problems are published once I have actually solved them &mdash; not before.</p>
+            </div>
+        </section>
+
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 1</span>
+                <h2>Representation</h2>
+                <span class="rng">Days 1–7</span>
+            </div>
+            <p>How anything is stored. Bits, integers, floats, text — and a single variable followed all the way down to its address in memory.</p>
+            <a class="day-row" href="days/day-01-bits-bytes-endianness.html">
+                <span class="dn">01</span>
+                <div class="dbody"><h3>Bits, bytes &amp; endianness</h3><p>Binary, octal and hex from first principles. Every bitwise operator with worked column arithmetic, the idiom table, two's-complement tricks, and why byte order exists.</p></div>
+                <span class="st live">Live</span>
+            </a>
+            <div class="day-row pending">
+                <span class="dn">02</span>
+                <div class="dbody"><h3>Integers &amp; two's complement</h3><p>Why negation is invert-plus-one, where overflow is undefined, and how CPython stores an integer with a thousand digits.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">03</span>
+                <div class="dbody"><h3>Floating point &amp; IEEE 754</h3><p>Sign, exponent, mantissa — and why 0.1 + 0.2 is not 0.3 in any language you will ever use.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">04</span>
+                <div class="dbody"><h3>Text, Unicode &amp; UTF-8</h3><p>Code points versus encodings, the continuation-byte scheme, and why the length of an emoji depends on who you ask.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">05</span>
+                <div class="dbody"><h3>A variable, all the way down</h3><p>One assignment followed from name to namespace to object header to the bytes at an address — in Python, in Rust, and in assembly.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">06</span>
+                <div class="dbody"><h3>References, ownership &amp; aliasing</h3><p>Pointers, Python's reference semantics, and the borrow checker as a memory tutor that refuses to compile until you understand.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">07</span>
+                <div class="dbody"><h3>Arrays versus linked structures</h3><p>Why contiguous memory beats pointer-chasing often enough to overturn the complexity on paper. Cache lines, introduced early.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 2</span>
+                <h2>Data structures</h2>
+                <span class="rng">Days 8–15</span>
+            </div>
+            <p>Every structure from its memory layout up, including what CPython's list and dict actually do underneath.</p>
+            <div class="day-row pending">
+                <span class="dn">08</span>
+                <div class="dbody"><h3>Dynamic arrays &amp; amortized analysis</h3><p>Three proofs that append is O(1) amortized, and the real growth formula CPython uses.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">09</span>
+                <div class="dbody"><h3>Hashing &amp; collisions</h3><p>What a hash function owes you, why collisions are unavoidable, and the cliff at high load factor.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">10</span>
+                <div class="dbody"><h3>CPython's dict &amp; set</h3><p>The compact layout that made insertion order a language guarantee, perturbed probing, and hash randomisation.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">11</span>
+                <div class="dbody"><h3>Linked structures, deques, stacks</h3><p>Why Python's deque is a list of blocks rather than a list of nodes, and the monotonic stack as a competitive staple.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">12</span>
+                <div class="dbody"><h3>Trees, BSTs &amp; balancing</h3><p>The invariant, the degeneration, the rotations — and traversal in O(1) space.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">13</span>
+                <div class="dbody"><h3>B-trees &amp; disk-oriented structures</h3><p>Why databases count fetches rather than comparisons, and what that does to the shape of a tree.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">14</span>
+                <div class="dbody"><h3>Heaps &amp; priority queues</h3><p>A complete tree with no pointers at all, and the proof that building one is linear.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row test pending">
+                <span class="dn">15</span>
+                <div class="dbody"><h3>Tries, union-find &amp; graph layout</h3><p>Prefix lookup independent of dictionary size, near-constant merging, and the memory arithmetic that settles list versus matrix.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 3</span>
+                <h2>Algorithms core</h2>
+                <span class="rng">Days 16–23</span>
+            </div>
+            <p>Complexity derived rather than memorised. Sorting with its lower-bound proof, binary search, recursion, dynamic programming.</p>
+            <div class="day-row pending">
+                <span class="dn">16</span>
+                <div class="dbody"><h3>Complexity, rigorously</h3><p>O, Θ and Ω as three different claims. Amortized analysis three ways. Why constants still decide real performance.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">17</span>
+                <div class="dbody"><h3>Sorting &amp; the lower bound</h3><p>Merge, quick, and the decision-tree proof that no comparison sort can beat n log n.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">18</span>
+                <div class="dbody"><h3>Timsort &amp; beating n log n</h3><p>Run detection and galloping — and the conditions under which counting and radix sort win outright.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">19</span>
+                <div class="dbody"><h3>Binary search &amp; invariants</h3><p>Commit to a half-open interval and off-by-ones stop happening. Then searching the answer space instead of the array.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">20</span>
+                <div class="dbody"><h3>Recursion &amp; the Master theorem</h3><p>What a call actually costs, all three cases of the theorem, and why Python has no tail calls.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">21</span>
+                <div class="dbody"><h3>Dynamic programming: state design</h3><p>Designing the state is the step people skip. Memoization versus tabulation and their different space profiles.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">22</span>
+                <div class="dbody"><h3>DP: grids, knapsack, bitmask</h3><p>Edit distance, the loop direction that breaks 0/1 knapsack, and subset DP at 2ⁿ states.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row test pending">
+                <span class="dn">23</span>
+                <div class="dbody"><h3>Greedy &amp; exchange arguments</h3><p>When a local choice is provably global — and how to tell before writing the wrong solution.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 4</span>
+                <h2>Graphs &amp; search</h2>
+                <span class="rng">Days 24–28</span>
+            </div>
+            <p>Traversal, shortest paths, spanning trees, flow, and pruned search.</p>
+            <div class="day-row pending">
+                <span class="dn">24</span>
+                <div class="dbody"><h3>Traversal, topological sort, cycles</h3><p>BFS and DFS by memory profile, ordering by dependency, and three-colour cycle detection.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">25</span>
+                <div class="dbody"><h3>Shortest paths</h3><p>Dijkstra and the exact step where a negative edge breaks its invariant. Bellman-Ford, Floyd-Warshall, 0-1 BFS.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">26</span>
+                <div class="dbody"><h3>Spanning trees &amp; flow</h3><p>The cut property, then max-flow min-cut and bipartite matching as a flow problem in disguise.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">27</span>
+                <div class="dbody"><h3>Backtracking &amp; pruning</h3><p>Search as a tree you cut. Constraint ordering, and meet-in-the-middle halving the exponent.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row test pending">
+                <span class="dn">28</span>
+                <div class="dbody"><h3>Contest simulation I</h3><p>Timed, unassisted, ramping to hard. The value is the editorial afterwards.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 5</span>
+                <h2>Strings</h2>
+                <span class="rng">Days 29–33</span>
+            </div>
+            <p>Pattern matching from KMP to Aho-Corasick and suffix arrays — plus what Python's own string methods really run.</p>
+            <div class="day-row pending">
+                <span class="dn">29</span>
+                <div class="dbody"><h3>String matching: KMP and Z</h3><p>The failure function, why no character is examined twice — and what CPython's find actually uses instead.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">30</span>
+                <div class="dbody"><h3>Rolling hashes &amp; many patterns</h3><p>Rabin-Karp, Boyer-Moore's skipping, and Aho-Corasick searching thousands of patterns in one pass.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">31</span>
+                <div class="dbody"><h3>Suffix arrays &amp; LCP</h3><p>Construction by sorting-doubling, and the problems the pair unlocks.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">32</span>
+                <div class="dbody"><h3>Python's text toolkit, inside</h3><p>Every string method and the algorithm behind it. Why the regex engine backtracks, and what Unicode normalisation fixes.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row test pending">
+                <span class="dn">33</span>
+                <div class="dbody"><h3>Segment trees, Fenwick, sparse tables</h3><p>Range queries chosen by query pattern rather than habit, with lazy propagation.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 6</span>
+                <h2>Data &amp; SQL</h2>
+                <span class="rng">Days 34–40</span>
+            </div>
+            <p>The relational model, query planning, join algorithms, indexes, transactions, and how rows sit on disk.</p>
+            <div class="day-row pending">
+                <span class="dn">34</span>
+                <div class="dbody"><h3>The relational model</h3><p>Declare what, let the planner decide how. Normal forms by the anomaly each one removes.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">35</span>
+                <div class="dbody"><h3>SQL mechanics</h3><p>Joins, correlated subqueries that are accidentally quadratic, recursive CTEs, and window functions.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">36</span>
+                <div class="dbody"><h3>How a query executes</h3><p>Parse, plan, optimise, execute — and reading the gap between estimated and actual rows.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">37</span>
+                <div class="dbody"><h3>Join algorithms</h3><p>Nested loop, hash join, sort-merge. Why join order matters more than join algorithm.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">38</span>
+                <div class="dbody"><h3>Indexes</h3><p>The left-prefix rule, covering indexes, and the half people skip: every index slows every write.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">39</span>
+                <div class="dbody"><h3>Transactions &amp; isolation</h3><p>Each anomaly mapped to the level that prevents it. MVCC, and why consistent lock ordering fixes deadlocks.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row test pending">
+                <span class="dn">40</span>
+                <div class="dbody"><h3>Storage engines</h3><p>Pages, tuple headers, the write-ahead log, and why analytics moved to columnar.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 7</span>
+                <h2>The machine</h2>
+                <span class="rng">Days 41–47</span>
+            </div>
+            <p>Bytecode to ARM64, cache and pipeline, allocators, concurrency, and the kernel boundary.</p>
+            <div class="day-row pending">
+                <span class="dn">41</span>
+                <div class="dbody"><h3>How code actually runs</h3><p>Source to bytecode to the eval loop; source to LLVM to ARM64. Why a JIT needs warmup.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">42</span>
+                <div class="dbody"><h3>Reading ARM64 assembly</h3><p>Registers, load/store, the calling convention — then a loop mapped instruction by instruction.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">43</span>
+                <div class="dbody"><h3>Cache, pipeline, prediction</h3><p>Real latencies, the 64-byte line, and two identical-complexity programs an order of magnitude apart.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">44</span>
+                <div class="dbody"><h3>Memory management &amp; allocators</h3><p>Free lists and fragmentation, refcounting plus cycle collection, and RAII enforced by a compiler.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">45</span>
+                <div class="dbody"><h3>Threads, races &amp; locks</h3><p>What a data race is at the instruction level, what the GIL actually protects, and the four deadlock conditions.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">46</span>
+                <div class="dbody"><h3>Atomics, ordering &amp; async</h3><p>Compare-and-swap, why the CPU reorders your stores, and why one blocking call freezes an event loop.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">47</span>
+                <div class="dbody"><h3>I/O, syscalls &amp; the kernel</h3><p>What crossing into the kernel costs, why buffering exists, and how one thread watches ten thousand sockets.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+        <section class="phase">
+            <div class="phase-head">
+                <span class="pn">PHASE 8</span>
+                <h2>Synthesis</h2>
+                <span class="rng">Days 48–50</span>
+            </div>
+            <p>Profiling, and a capstone on a system running in production.</p>
+            <div class="day-row pending">
+                <span class="dn">48</span>
+                <div class="dbody"><h3>Profiling &amp; the optimisation ladder</h3><p>Measure first. Then complexity, structure, batching, caching, idiom, native code — parallelism last.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row test pending">
+                <span class="dn">49</span>
+                <div class="dbody"><h3>Contest simulation II</h3><p>Comprehensive, timed, hardest calibration, including a query-design problem.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+            <div class="day-row pending">
+                <span class="dn">50</span>
+                <div class="dbody"><h3>Capstone</h3><p>A real service profiled, its genuine bottleneck fixed, and the reasoning written from complexity down to syscall count.</p></div>
+                <span class="st soon">Soon</span>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        &copy; 2026 Jeevan P Rai &middot; Powered by Kronos-Nexus Infrastructure
+    </footer>
+</body>
+
+</html>
