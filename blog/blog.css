@@ -211,6 +211,7 @@ a:hover { color: var(--accent); }
 /* ---- Post list ---- */
 .post-list { padding: 1rem 0 5rem; display: grid; gap: 1rem; }
 .post-card { animation: cardIn 0.3s var(--ease) both; }
+.post-card[hidden] { display: none; }   /* override .post-card{display:block} so filtering hides cards */
 @keyframes cardIn { from { opacity: 0; } to { opacity: 1; } }
 .post-card {
     display: block;
