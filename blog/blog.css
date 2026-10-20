@@ -181,8 +181,37 @@ a:hover { color: var(--accent); }
     margin-right: 0.1rem;
 }
 
+/* ---- Category filter chips ---- */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.4rem 1.7rem 0.1rem;  /* side inset matches hero + card text */
+}
+.chip {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.42rem 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.chip:hover { color: var(--text); border-color: var(--line-strong); }
+.chip.is-active {
+    color: var(--ink);
+    background: var(--accent-2);
+    border-color: var(--accent-2);
+    font-weight: 600;
+}
+.no-results { color: var(--muted-2); font-size: 0.95rem; padding: 0.5rem 0 2rem; }
+
 /* ---- Post list ---- */
 .post-list { padding: 1rem 0 5rem; display: grid; gap: 1rem; }
+.post-card { animation: cardIn 0.3s var(--ease) both; }
+@keyframes cardIn { from { opacity: 0; } to { opacity: 1; } }
 .post-card {
     display: block;
     background: var(--panel);
@@ -400,6 +429,7 @@ a:hover { color: var(--accent); }
     .wrap { padding: 0 1.3rem; }
     .nav { padding: 0.85rem 1.3rem; }
     .blog-hero { padding: 2.6rem 1.35rem 1.8rem; }
+    .filters { padding-left: 1.35rem; padding-right: 1.35rem; }
     .blog-hero p { font-size: 1rem; }
     .article { padding: 2.6rem 1.35rem 1.5rem; }
     .article-header { margin-bottom: 2rem; padding-bottom: 1.5rem; }

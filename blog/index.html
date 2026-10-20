@@ -60,10 +60,51 @@
             </div>
         </section>
 
-        <!-- POST LIST: newest first. Each new post = one <a class="post-card"> here + a file in posts/. -->
-        <section class="wrap post-list">
+        <!-- CATEGORY FILTER -->
+        <nav class="wrap filters" aria-label="Filter posts by category">
+            <button class="chip is-active" data-filter="all" aria-pressed="true">All</button>
+            <button class="chip" data-filter="heritage" aria-pressed="false">Heritage</button>
+            <button class="chip" data-filter="technology" aria-pressed="false">Technology</button>
+            <button class="chip" data-filter="writing" aria-pressed="false">Writing</button>
+        </nav>
 
-            <a class="post-card" href="posts/a-cloud-of-my-own.html">
+        <!-- POST LIST: newest first. New post = one <a class="post-card" data-cat="..."> here + a file in posts/ + an entry in feed.xml, sitemap.xml and book.html. -->
+        <section class="wrap post-list" id="post-list">
+
+            <a class="post-card" data-cat="heritage" href="posts/dasara-in-tulu-nadu.html">
+                <div class="post-meta">
+                    <span>Oct 20, 2026</span>
+                    <span>· 14 min read</span>
+                </div>
+                <h2>Dasara in Tulu Nadu: The Goddess Who Rides a Tiger</h2>
+                <p>How the coast keeps Dasara — a sourced account of every ritual: Sharada's nine nights at Kudroli,
+                    the Gombe dolls, Saraswati Puja, the day we worship our tools, Vijayadashami, Banni and
+                    Vidyarambha, and the tigers in the streets.</p>
+                <div class="tags">
+                    <span class="tag">culture</span>
+                    <span class="tag">tulunadu</span>
+                    <span class="tag">dasara</span>
+                    <span class="tag">heritage</span>
+                </div>
+            </a>
+
+            <a class="post-card" data-cat="heritage" href="posts/pili-vesha-the-tiger-dance.html">
+                <div class="post-meta">
+                    <span>Oct 20, 2026</span>
+                    <span>· 8 min read</span>
+                </div>
+                <h2>Pili Vesha: The Tiger in the Streets</h2>
+                <p>Why men paint themselves as tigers and dance through the coast's streets during Dasara — the
+                    drums, the body paint, the acrobatics, and the vow to the goddess behind it all.</p>
+                <div class="tags">
+                    <span class="tag">culture</span>
+                    <span class="tag">tulunadu</span>
+                    <span class="tag">tiger dance</span>
+                    <span class="tag">heritage</span>
+                </div>
+            </a>
+
+            <a class="post-card" data-cat="technology" href="posts/a-cloud-of-my-own.html">
                 <div class="post-meta">
                     <span>Aug 21, 2026</span>
                     <span>· 8 min read</span>
@@ -79,7 +120,7 @@
                 </div>
             </a>
 
-            <a class="post-card" href="posts/my-ancestors-alphabet-became-code.html">
+            <a class="post-card" data-cat="heritage technology" href="posts/my-ancestors-alphabet-became-code.html">
                 <div class="post-meta">
                     <span>Aug 20, 2026</span>
                     <span>· 9 min read</span>
@@ -96,7 +137,7 @@
                 </div>
             </a>
 
-            <a class="post-card" href="posts/nagara-panchami-the-forest-we-never-cut.html">
+            <a class="post-card" data-cat="heritage" href="posts/nagara-panchami-the-forest-we-never-cut.html">
                 <div class="post-meta">
                     <span>Aug 20, 2026</span>
                     <span>· 8 min read</span>
@@ -113,7 +154,7 @@
                 </div>
             </a>
 
-            <a class="post-card" href="posts/aati-the-month-with-no-gods.html">
+            <a class="post-card" data-cat="heritage" href="posts/aati-the-month-with-no-gods.html">
                 <div class="post-meta">
                     <span>Aug 20, 2026</span>
                     <span>· 10 min read</span>
@@ -130,7 +171,7 @@
                 </div>
             </a>
 
-            <a class="post-card" href="posts/my-house-was-whispering-to-strangers.html">
+            <a class="post-card" data-cat="technology" href="posts/my-house-was-whispering-to-strangers.html">
                 <div class="post-meta">
                     <span>Aug 20, 2026</span>
                     <span>· 9 min read</span>
@@ -147,7 +188,7 @@
                 </div>
             </a>
 
-            <a class="post-card" href="posts/tulunad-heritage-land-of-daivas.html">
+            <a class="post-card" data-cat="heritage" href="posts/tulunad-heritage-land-of-daivas.html">
                 <div class="post-meta">
                     <span>Aug 19, 2026</span>
                     <span>· 16 min read</span>
@@ -164,7 +205,7 @@
                 </div>
             </a>
 
-            <a class="post-card" href="posts/why-i-write.html">
+            <a class="post-card" data-cat="writing" href="posts/why-i-write.html">
                 <div class="post-meta">
                     <span>Aug 19, 2026</span>
                     <span>· 3 min read</span>
@@ -178,12 +219,50 @@
                 </div>
             </a>
 
+            <p class="no-results" hidden>Nothing here in this category yet.</p>
         </section>
     </main>
 
     <footer class="site-footer">
         © 2026 Jeevan P Rai · Powered by Kronos-Nexus Infrastructure
     </footer>
+
+    <script>
+        (function () {
+            var chips = Array.prototype.slice.call(document.querySelectorAll('.filters .chip'));
+            var cards = Array.prototype.slice.call(document.querySelectorAll('.post-list .post-card'));
+            var empty = document.querySelector('.no-results');
+            if (!chips.length) return;
+
+            function apply(filter) {
+                var shown = 0;
+                cards.forEach(function (card) {
+                    var cats = (card.getAttribute('data-cat') || '').split(/\s+/);
+                    var match = filter === 'all' || cats.indexOf(filter) !== -1;
+                    card.hidden = !match;
+                    if (match) shown++;
+                });
+                if (empty) empty.hidden = shown !== 0;
+                try { history.replaceState(null, '', filter === 'all' ? location.pathname : '?cat=' + filter); } catch (e) {}
+            }
+
+            chips.forEach(function (chip) {
+                chip.addEventListener('click', function () {
+                    chips.forEach(function (c) { c.classList.remove('is-active'); c.setAttribute('aria-pressed', 'false'); });
+                    chip.classList.add('is-active');
+                    chip.setAttribute('aria-pressed', 'true');
+                    apply(chip.getAttribute('data-filter'));
+                });
+            });
+
+            // honour ?cat= in the URL on load
+            var start = new URLSearchParams(location.search).get('cat');
+            if (start) {
+                var target = chips.filter(function (c) { return c.getAttribute('data-filter') === start; })[0];
+                if (target) target.click();
+            }
+        })();
+    </script>
 </body>
 
 </html>
