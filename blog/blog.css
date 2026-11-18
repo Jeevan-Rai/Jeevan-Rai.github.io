@@ -342,6 +342,10 @@ a:hover { color: var(--accent); }
     text-align: center;
     line-height: 1.5;
 }
+/* two-up figure grid — a matched pair side by side */
+.prose .fig-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin: 2.2rem 0; align-items: start; }
+.prose .fig-duo figure { margin: 0; }
+@media (max-width: 560px) { .prose .fig-duo { grid-template-columns: 1fr; gap: 1.8rem; } }
 .prose a { text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
 
 /* ---- Article footer ---- */
